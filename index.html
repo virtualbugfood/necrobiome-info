@@ -3,510 +3,908 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NECROBIOME // CELL-SIM v0.25</title>
+<title>NECROBIOME // CELL-SIM v0.28</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --cyan:    #00FFB4;
-    --pink:    #FF3296;
-    --blue:    #00C8FF;
-    --violet:  #CC00FF;
-    --lime:    #64FF00;
-    --silver:  #C8C8C8;
-    --bg:      #02020C;
-    --surface: #05050F;
-    --border:  #1A1A3A;
-    --dim:     #7AAFA0;
-    --dimmer:  #5A8878;
-  }
+:root {
+  --cyan:    #00FFB4;
+  --pink:    #FF3296;
+  --blue:    #00C8FF;
+  --violet:  #CC00FF;
+  --lime:    #64FF00;
+  --silver:  #C8C8C8;
+  --gold:    #FFD700;
+  --bg:      #02020C;
+  --surface: #05050F;
+  --surface2:#080818;
+  --border:  #1A1A3A;
+  --dim:     #7AAFA0;
+  --dimmer:  #5A8878;
+  --nav-h:   52px;
+}
 
-  html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; }
 
-  body {
-    background: var(--bg);
-    color: var(--cyan);
-    font-family: 'Share Tech Mono', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body {
+  background: var(--bg);
+  color: var(--dim);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-  /* Scanline overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.08) 2px,
-      rgba(0,0,0,0.08) 4px
-    );
-    pointer-events: none;
-    z-index: 999;
-  }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none;
+  z-index: 998;
+}
 
-  /* Particle canvas */
-  #particles {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 1;
-  }
+#particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
 
-  .page {
-    position: relative;
-    z-index: 1;
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 0 1.5rem 6rem;
-  }
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  background: rgba(2, 2, 12, 0.95);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  gap: 0;
+  backdrop-filter: blur(8px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+nav::-webkit-scrollbar { display: none; }
 
-  /* ── Hero ── */
-  .hero {
-    padding: 4rem 0 2rem;
-    text-align: center;
-  }
+.nav-logo {
+  color: var(--cyan);
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  white-space: nowrap;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+}
 
-  .banner-wrap {
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-  }
+.nav-logo span { color: var(--pink); }
 
-  .banner {
-    font-family: 'VT323', monospace;
-    font-size: clamp(6px, 1.05vw, 13px);
-    line-height: 1.15;
-    color: var(--cyan);
-    white-space: pre;
-    display: inline-block;
-    text-align: left;
-    animation: glow-pulse 4s ease-in-out infinite;
-  }
+nav a {
+  color: var(--dimmer);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  padding: 0 0.9rem;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+nav a:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+nav a.active { color: var(--cyan); border-bottom-color: var(--cyan); }
 
-  @keyframes glow-pulse {
-    0%, 100% { text-shadow: 0 0 8px rgba(0,255,180,0.3); }
-    50%       { text-shadow: 0 0 20px rgba(0,255,180,0.6), 0 0 40px rgba(0,255,180,0.2); }
-  }
+/* ── Page ── */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: calc(var(--nav-h) + 1rem) 1.5rem 6rem;
+}
 
-  .subtitle {
-    color: var(--pink);
-    letter-spacing: 4px;
-    font-size: 12px;
-    margin-bottom: 0.4rem;
-    animation: fadeup 1s ease 0.3s both;
-  }
+/* ── Hero ── */
+.hero {
+  padding: 3rem 0 2rem;
+  text-align: center;
+}
 
-  .tagline {
-    color: var(--dim);
-    font-style: italic;
-    font-size: 13px;
-    animation: fadeup 1s ease 0.5s both;
-  }
+.banner-wrap { overflow-x: auto; margin-bottom: 1.25rem; }
 
-  @keyframes fadeup {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: none; }
-  }
+.banner {
+  font-family: 'VT323', monospace;
+  font-size: clamp(6px, 1.0vw, 12px);
+  line-height: 1.15;
+  color: var(--cyan);
+  white-space: pre;
+  display: inline-block;
+  text-align: left;
+  animation: glow-pulse 4s ease-in-out infinite;
+}
 
-  .install-strip {
-    margin: 2rem auto 0;
-    display: inline-block;
-    background: #080814;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0.75rem 1.5rem;
-    font-size: 13px;
-    color: var(--blue);
-    letter-spacing: 1px;
-    animation: fadeup 1s ease 0.7s both;
-  }
+@keyframes glow-pulse {
+  0%,100% { text-shadow: 0 0 6px rgba(0,255,180,0.25); }
+  50%      { text-shadow: 0 0 18px rgba(0,255,180,0.55), 0 0 35px rgba(0,255,180,0.15); }
+}
 
-  .install-strip span { color: var(--dim); margin: 0 0.5rem; }
+.subtitle {
+  color: var(--pink);
+  letter-spacing: 4px;
+  font-size: 12px;
+  margin-bottom: 0.35rem;
+  animation: fadeup 0.8s ease 0.2s both;
+}
 
-  /* ── Section headers ── */
-  .section-label {
-    color: var(--pink);
-    font-size: 11px;
-    letter-spacing: 3px;
-    margin: 3.5rem 0 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--border), transparent);
-  }
+.tagline {
+  color: var(--dimmer);
+  font-style: italic;
+  font-size: 13px;
+  animation: fadeup 0.8s ease 0.4s both;
+}
 
-  /* ── Intro text ── */
-  .intro {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.5rem 2rem;
-    animation: fadeup 1s ease 0.9s both;
-  }
+.coming-soon {
+  display: inline-block;
+  margin-top: 1.75rem;
+  padding: 0.6rem 1.75rem;
+  background: #080814;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--pink);
+  letter-spacing: 3px;
+  font-size: 12px;
+  animation: fadeup 0.8s ease 0.6s both;
+}
 
-  .intro p { color: var(--dim); line-height: 1.9; }
-  .intro p + p { margin-top: 0.75rem; }
-  .intro .hi { color: var(--cyan); }
-  .intro .hi2 { color: var(--blue); }
+@keyframes fadeup {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: none; }
+}
 
-  /* ── Biome grid ── */
-  .biome-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 8px;
-  }
+/* ── Ticker ── */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: #030310;
+  padding: 0.35rem 0;
+  margin: 2rem 0;
+}
+.ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 35s linear infinite;
+  color: var(--pink);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+@keyframes ticker {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-100%); }
+}
 
-  .biome-card {
-    background: var(--surface);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-    border: 1px solid var(--border);
-    transition: border-color 0.2s, transform 0.2s;
-    cursor: default;
-  }
-  .biome-card:hover {
-    transform: translateY(-2px);
-  }
-  .biome-card.void    { border-color: #001A10; }
-  .biome-card.neon    { border-color: #200015; }
-  .biome-card.reef    { border-color: #001525; }
-  .biome-card.chrome  { border-color: #222222; }
-  .biome-card.acid    { border-color: #0D1A00; }
-  .biome-card.cyber   { border-color: #2A005A; background: #0D0020; }
+/* ── Sections ── */
+section { margin-bottom: 3rem; scroll-margin-top: calc(var(--nav-h) + 1rem); }
 
-  .biome-card:hover.void   { border-color: #00FFB4; }
-  .biome-card:hover.neon   { border-color: #FF3296; }
-  .biome-card:hover.reef   { border-color: #00C8FF; }
-  .biome-card:hover.chrome { border-color: #C8C8C8; }
-  .biome-card:hover.acid   { border-color: #64FF00; }
-  .biome-card:hover.cyber  { border-color: #CC00FF; }
+.section-label {
+  color: var(--pink);
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border), transparent);
+}
 
-  .biome-name {
-    font-size: 11px;
-    letter-spacing: 2px;
-    margin-bottom: 0.4rem;
-  }
-  .biome-desc { color: var(--dimmer); font-size: 11px; line-height: 1.6; }
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+}
 
-  /* ── Systems grid ── */
-  .systems-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-  }
-  @media (max-width: 520px) { .systems-grid { grid-template-columns: 1fr; } }
+.card + .card { margin-top: 10px; }
 
-  .system-item h3 {
-    color: var(--cyan);
-    font-size: 13px;
-    margin-bottom: 0.3rem;
-    font-weight: normal;
-  }
-  .system-item p { color: var(--dimmer); font-size: 11px; line-height: 1.6; }
+.card p { color: var(--dim); line-height: 1.85; }
+.card p + p { margin-top: 0.75rem; }
 
-  /* ── Titles list ── */
-  .titles-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .title-row {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #0A0A1A;
-  }
-  .title-badge {
-    font-size: 11px;
-    color: var(--cyan);
-    min-width: 120px;
-    flex-shrink: 0;
-  }
-  .title-desc { color: var(--dimmer); font-size: 11px; }
-  .perm { color: var(--pink); font-size: 10px; margin-left: 6px; }
+/* ── Intro ── */
+.intro { animation: fadeup 0.8s ease 0.8s both; }
+.hi  { color: var(--cyan); }
+.hi2 { color: var(--blue); }
 
-  /* ── Modes ── */
-  .modes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .mode-row {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-  }
-  .mode-icon {
-    font-size: 13px;
-    min-width: 130px;
-    flex-shrink: 0;
-  }
-  .mode-desc { color: var(--dimmer); font-size: 11px; line-height: 1.6; }
+/* ── Biomes ── */
+.biome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
 
-  /* ── Controls ── */
-  .controls-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 6px 1.5rem;
-  }
-  .ctrl-row {
-    display: flex;
-    gap: 0.75rem;
-    align-items: baseline;
-  }
-  .ctrl-key {
-    color: var(--cyan);
-    font-size: 11px;
-    min-width: 80px;
-    flex-shrink: 0;
-  }
-  .ctrl-action { color: var(--dimmer); font-size: 11px; }
+.biome-card {
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  border: 1px solid #111125;
+  transition: border-color 0.2s, transform 0.15s;
+  cursor: default;
+}
+.biome-card:hover { transform: translateY(-2px); }
+.biome-card.void:hover   { border-color: var(--cyan); }
+.biome-card.neon:hover   { border-color: var(--pink); }
+.biome-card.reef:hover   { border-color: var(--blue); }
+.biome-card.chrome:hover { border-color: var(--silver); }
+.biome-card.acid:hover   { border-color: var(--lime); }
+.biome-card.cyber        { background: #0D0020; border-color: #2A005A; }
+.biome-card.cyber:hover  { border-color: var(--violet); }
 
-  /* ── Card wrapper ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.5rem 2rem;
-  }
+.biome-name { font-size: 11px; letter-spacing: 2px; margin-bottom: 0.3rem; }
+.biome-desc { color: var(--dimmer); font-size: 11px; line-height: 1.65; }
 
-  /* ── Footer ── */
-  footer {
-    margin-top: 5rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    color: #0E1E18;
-    font-size: 11px;
-    line-height: 2;
-  }
-  footer a { color: var(--dim); text-decoration: none; }
-  footer a:hover { color: var(--cyan); }
+.biome-meta {
+  margin-top: 0.75rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #0A0A20;
+  font-size: 10px;
+  color: #333355;
+  line-height: 1.7;
+}
 
-  /* ── Ticker ── */
-  .ticker-wrap {
-    overflow: hidden;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    background: #030310;
-    padding: 0.4rem 0;
-    margin: 2rem 0;
-    position: relative;
-  }
-  .ticker-track {
-    display: inline-block;
-    white-space: nowrap;
-    animation: ticker 30s linear infinite;
-    color: var(--pink);
-    font-size: 11px;
-    letter-spacing: 1px;
-  }
-  @keyframes ticker {
-    from { transform: translateX(100vw); }
-    to   { transform: translateX(-100%); }
-  }
+.hazard-tag {
+  display: inline-block;
+  margin-top: 0.4rem;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+/* ── Diet cards ── */
+.diet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+/* ── Tables ── */
+.tbl-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+th {
+  text-align: left;
+  color: var(--pink);
+  font-size: 10px;
+  letter-spacing: 2px;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+td {
+  padding: 0.45rem 0.75rem;
+  color: var(--dim);
+  border-bottom: 1px solid #0A0A18;
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+td:first-child { color: var(--cyan); white-space: nowrap; }
+
+/* ── Two-col layout ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 560px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ── Systems ── */
+.system-item h3 {
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: normal;
+  margin-bottom: 0.3rem;
+}
+.system-item p { font-size: 12px; color: var(--dimmer); line-height: 1.65; }
+
+/* ── Titles list ── */
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #08081A;
+}
+.title-row:last-child { border: none; }
+.title-key { color: var(--cyan); font-size: 12px; min-width: 120px; flex-shrink: 0; }
+.title-val { color: var(--dimmer); font-size: 11px; }
+.perm { color: var(--pink); font-size: 10px; margin-left: 8px; }
+
+/* ── Controls table ── */
+.ctrl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 2rem;
+}
+@media (max-width: 560px) { .ctrl-grid { grid-template-columns: 1fr; } }
+
+.ctrl-row { display: flex; align-items: baseline; gap: 0.75rem; padding: 0.25rem 0; }
+.ctrl-key { color: var(--cyan); font-size: 11px; min-width: 110px; flex-shrink: 0; }
+.ctrl-act { color: var(--dimmer); font-size: 11px; }
+
+/* ── Modes ── */
+.mode-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 8px;
+}
+.mode-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.mode-icon { font-size: 14px; }
+.mode-name { color: var(--cyan); font-size: 13px; letter-spacing: 1px; }
+.mode-lock { color: #333355; font-size: 10px; margin-left: auto; }
+.mode-desc { color: var(--dimmer); font-size: 12px; line-height: 1.7; }
+
+/* ── Subheading ── */
+h3.sub {
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: normal;
+  letter-spacing: 1px;
+  margin: 1.5rem 0 0.75rem;
+}
+h3.sub:first-child { margin-top: 0; }
+
+/* ── Lore block ── */
+.lore {
+  border-left: 2px solid var(--border);
+  padding: 0.75rem 1.25rem;
+  color: #3A5A50;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.85;
+  margin-bottom: 1rem;
+}
+
+/* ── Glitch chips ── */
+.glitch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 0.75rem;
+}
+.glitch-chip {
+  background: var(--surface2);
+  border: 1px solid #1A0040;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+}
+.glitch-chip .chip-name { color: var(--violet); font-size: 11px; letter-spacing: 2px; margin-bottom: 0.3rem; }
+.glitch-chip p { color: #441166; font-size: 11px; line-height: 1.6; }
+
+/* ── Watch list ── */
+.watch-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #08081A;
+}
+.watch-item:last-child { border: none; }
+.watch-item strong { color: var(--cyan); display: block; margin-bottom: 0.2rem; font-weight: normal; }
+.watch-item p { color: var(--dimmer); font-size: 12px; line-height: 1.65; }
+
+/* ── Cyberspace rule table ── */
+.rule-table { font-size: 11px; }
+.rule-table td:first-child { color: var(--violet); }
+
+/* ── Footer ── */
+footer {
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: #1A2A24;
+  font-size: 11px;
+  line-height: 2.2;
+}
 </style>
 </head>
 <body>
 
 <canvas id="particles"></canvas>
 
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">NECROBIOME <span>//</span></div>
+  <a href="#what">WHAT</a>
+  <a href="#biomes">BIOMES</a>
+  <a href="#genome">GENOME</a>
+  <a href="#diet">DIET</a>
+  <a href="#structures">STRUCTURES</a>
+  <a href="#cyberspace">CYBERSPACE</a>
+  <a href="#titles">TITLES</a>
+  <a href="#modes">MODES</a>
+  <a href="#daemon">DAEMON</a>
+  <a href="#controls">CONTROLS</a>
+  <a href="#watch">WATCH FOR</a>
+</nav>
+
 <div class="page">
 
   <!-- Hero -->
   <div class="hero">
     <div class="banner-wrap">
-      <pre class="banner"> ███╗   ██╗███████╗ ██████╗██████╗  ██████╗ ██████╗ ██╗ ██████╗ ███╗   ███╗███████╗
+      <pre class="banner"> 
+ ███╗   ██╗███████╗ ██████╗██████╗  ██████╗ ██████╗ ██╗ ██████╗ ███╗   ███╗███████╗
  ████╗  ██║██╔════╝██╔════╝██╔══██╗██╔═══██╗██╔══██╗██║██╔═══██╗████╗ ████║██╔════╝
  ██╔██╗ ██║█████╗  ██║     ██████╔╝██║   ██║██████╔╝██║██║   ██║██╔████╔██║█████╗
  ██║╚██╗██║██╔══╝  ██║     ██╔══██╗██║   ██║██╔══██╗██║██║   ██║██║╚██╔╝██║██╔══╝
  ██║ ╚████║███████╗╚██████╗██║  ██║╚██████╔╝██████╔╝██║╚██████╔╝██║ ╚═╝ ██║███████╗
  ╚═╝  ╚═══╝╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝╚═╝     ╚═╝╚══════╝</pre>
     </div>
-    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 2 5</p>
+    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 2 8</p>
     <p class="tagline">"In the neon dark, life finds a genome."</p>
-    <div class="install-strip" style="color: var(--pink); letter-spacing: 3px;">
-      // COMING SOON //
-    </div>
+    <div class="coming-soon">// COMING SOON //</div>
   </div>
 
   <!-- Ticker -->
   <div class="ticker-wrap">
     <span class="ticker-track">
-      ◈ &nbsp; [ELDER] VXEM age 412 &nbsp;·&nbsp; ACID FLOOD — 14 hit, 3 survived &nbsp;·&nbsp; [FOUNDER] ZYOS built first Home &nbsp;·&nbsp; DATA SURGE — NUEM +0.4 energy &nbsp;·&nbsp; [ARCHITECT] crowned: KRNL-07 &nbsp;·&nbsp; CHROME LOCK — mutation halved 60 ticks &nbsp;·&nbsp; [SURVIVOR] AXOR outlasted the Delta &nbsp;·&nbsp; CYBERSPACE OPENED — RULE SHIFT: FRACTAL &nbsp;·&nbsp; GLITCH: TIMESTOP — PROC-01 outside time &nbsp; ◈
+      ◈ &nbsp; [ELDER] VXEM age 412 &nbsp;·&nbsp; ACID FLOOD — 14 hit, 3 survived &nbsp;·&nbsp; [FOUNDER] ZYOS built first Home &nbsp;·&nbsp; DATA SURGE — NUEM feasted &nbsp;·&nbsp; [ARCH] crowned: KRNL-07 survived 50 ticks in Cyberspace &nbsp;·&nbsp; CHROME LOCK — mutation halved 60 ticks &nbsp;·&nbsp; [SURVIVOR] AXOR outlasted the Delta &nbsp;·&nbsp; CYBERSPACE OPENED — RULE SHIFT: FRACTAL &nbsp;·&nbsp; GLITCH: TIMESTOP — PROC-01 outside time &nbsp;·&nbsp; [BUILDER] ORYQ completed Data Node at (88,34) &nbsp; ◈
     </span>
   </div>
 
-  <!-- Intro -->
-  <p class="section-label">WHAT IS THIS</p>
-  <div class="intro">
-    <p>NECROBIOME is a <span class="hi">cyberpunk Conway's Game of Life simulator</span> where every cell is a unique creature with its own genome, diet, energy, memories, and ambitions.</p>
-    <p>They are born. They eat. They build. They hunt. They grow old. They die. Some of them learn. Some evolve into something you've never seen before.</p>
-    <p>You didn't design them. You can't fully control them. You can only <span class="hi2">watch, intervene, and wonder.</span></p>
-  </div>
+  <!-- What -->
+  <section id="what">
+    <p class="section-label">WHAT IS THIS</p>
+    <div class="card intro">
+      <p>NECROBIOME is a <span class="hi">cyberpunk Conway's Game of Life simulator</span> where every cell is a unique creature with its own genome, diet, energy, memories, and ambitions.</p>
+      <p>In the original Game of Life every cell is identical, alive or dead, nothing more. In NECROBIOME every live cell is a creature with a 16-character genome encoding its diet, metabolism, aggression, resilience, and sociability. The Conway birth and death rules still apply, but they are bent and broken by who these creatures are and where they live.</p>
+      <p>They are born. They eat. They build. They hunt. They grow old. They die. Some of them learn. Some evolve into something you have never seen before.</p>
+      <p>You did not design them. You cannot fully control them. You can only <span class="hi2">watch, intervene, and wonder.</span></p>
+    </div>
+  </section>
 
   <!-- Biomes -->
-  <p class="section-label">THE BIOMES</p>
-  <div class="biome-grid">
-    <div class="biome-card void">
-      <p class="biome-name" style="color:#00FFB4">@ &nbsp; THE VOID</p>
-      <p class="biome-desc">Deep emptiness that rewards loners. Background radiation feeds those who need no one. Social creatures starve here.</p>
+  <section id="biomes">
+    <p class="section-label">THE BIOMES</p>
+    <div class="card" style="margin-bottom:10px;">
+      <p>Five natural biomes are painted across the grid using layered noise. Boundaries are soft and organic. Creatures that survive long enough in one biome develop traits suited to it. A sixth biome, Personal Cyberspace, does not exist at world start and must be unlocked through evolution.</p>
     </div>
-    <div class="biome-card neon">
-      <p class="biome-name" style="color:#FF3296">! &nbsp; NEON WASTES</p>
-      <p class="biome-desc">Carnivore country. Neon fungi feed only the aggressive. Passive creatures starve. The highest carnivore density in any biome.</p>
+    <div class="biome-grid">
+      <div class="biome-card void">
+        <p class="biome-name" style="color:#00FFB4">@&nbsp; THE VOID</p>
+        <p class="biome-desc">Deep emptiness that rewards loners. Background radiation feeds those who need no one. Social creatures starve here.</p>
+        <div class="biome-meta">
+          <div>Food: dark energy radiation</div>
+          <div>Best trait: Resilience</div>
+          <div class="hazard-tag" style="color:#004433">VOID PULSE - every 250 ticks</div>
+        </div>
+      </div>
+      <div class="biome-card neon">
+        <p class="biome-name" style="color:#FF3296">!&nbsp; NEON WASTES</p>
+        <p class="biome-desc">Carnivore country. Neon fungi feed only the aggressive. Passive creatures starve. The highest predator density of any biome.</p>
+        <div class="biome-meta">
+          <div>Food: neon fungi</div>
+          <div>Best trait: Aggression</div>
+          <div class="hazard-tag" style="color:#330015">NEON STORM - every 200 ticks</div>
+        </div>
+      </div>
+      <div class="biome-card reef">
+        <p class="biome-name" style="color:#00C8FF">~&nbsp; DATA REEF</p>
+        <p class="biome-desc">Data plankton feeds social creatures. Long lineages earn bonus energy. The Reef remembers who has always been here.</p>
+        <div class="biome-meta">
+          <div>Food: data plankton</div>
+          <div>Best trait: Sociability</div>
+          <div class="hazard-tag" style="color:#002233">DATA SURGE - every 180 ticks</div>
+        </div>
+      </div>
+      <div class="biome-card chrome">
+        <p class="biome-name" style="color:#C8C8C8">-&nbsp; CHROME FLATS</p>
+        <p class="biome-desc">The quietest place. Chrome moss rewards patience. Old creatures live longest here. The most stable biome in the world.</p>
+        <div class="biome-meta">
+          <div>Food: chrome moss</div>
+          <div>Best trait: Low metabolism</div>
+          <div class="hazard-tag" style="color:#222222">CHROME LOCK - every 350 ticks</div>
+        </div>
+      </div>
+      <div class="biome-card acid">
+        <p class="biome-name" style="color:#64FF00">%&nbsp; ACID DELTA</p>
+        <p class="biome-desc">Dangerous and alive. Acid Floods kill the weak and feed the resilient. Survivors are changed. Their children inherit the strength.</p>
+        <div class="biome-meta">
+          <div>Food: acid blooms</div>
+          <div>Best trait: Resilience</div>
+          <div class="hazard-tag" style="color:#1A3300">ACID FLOOD - every 220 ticks</div>
+        </div>
+      </div>
+      <div class="biome-card cyber">
+        <p class="biome-name" style="color:#CC00FF">Ψ&nbsp; PERSONAL CYBERSPACE</p>
+        <p class="biome-desc" style="color:#7744AA">Hidden. Unlocked through deep evolution. Conway rules rewrite themselves every 60 ticks. Only the deeply adapted survive.</p>
+        <div class="biome-meta" style="border-color:#1A0040; color:#330055;">
+          <div>Food: memory fragments</div>
+          <div>Best trait: Adaptations</div>
+          <div class="hazard-tag" style="color:#2A0055">GLITCH - every 40 ticks</div>
+        </div>
+      </div>
     </div>
-    <div class="biome-card reef">
-      <p class="biome-name" style="color:#00C8FF">~ &nbsp; DATA REEF</p>
-      <p class="biome-desc">Data plankton feeds social creatures. Long lineages earn bonus energy. The Reef remembers who has always been here.</p>
-    </div>
-    <div class="biome-card chrome">
-      <p class="biome-name" style="color:#C8C8C8">- &nbsp; CHROME FLATS</p>
-      <p class="biome-desc">The quietest place. Chrome moss rewards patience. Old creatures live longest here. Slow metabolizers accumulate energy over time.</p>
-    </div>
-    <div class="biome-card acid">
-      <p class="biome-name" style="color:#64FF00">% &nbsp; ACID DELTA</p>
-      <p class="biome-desc">Dangerous and alive. Acid Floods kill the weak and feed the resilient. Survivors are changed. Their children inherit the strength.</p>
-    </div>
-    <div class="biome-card cyber">
-      <p class="biome-name" style="color:#CC00FF">Ψ &nbsp; PERSONAL CYBERSPACE</p>
-      <p class="biome-desc" style="color:#441166">Hidden. Unlocked through deep evolution. The Conway rules rewrite themselves every 60 ticks. Only the deeply adapted survive.</p>
-    </div>
-  </div>
+  </section>
 
-  <!-- Systems -->
-  <p class="section-label">CORE SYSTEMS</p>
-  <div class="card">
-    <div class="systems-grid">
-      <div class="system-item">
-        <h3>Genome</h3>
-        <p>16-character DNA strings encoding diet, metabolism, aggression, resilience, sociability. Copy any creature's genome, paste it anywhere, or write your own from scratch.</p>
-      </div>
-      <div class="system-item">
-        <h3>Evolution</h3>
-        <p>Creatures remember which neighbor counts kept them alive. Mutations are guided by memory, not pure chance. Lineages develop genuine specialisation over generations.</p>
-      </div>
-      <div class="system-item">
-        <h3>Structures</h3>
-        <p>Social creatures place blueprints. Family members contribute materials toward the cost. When funded, it constructs automatically. Void Anchors. Neon Spires. Data Nodes. Homes.</p>
-      </div>
-      <div class="system-item">
-        <h3>Day &amp; Night</h3>
-        <p>A 300-tick cycle. Diurnal creatures gain bonus energy in daylight. Nocturnal ones thrive in the dark. Carnivores get a 1.5× hunt bonus at night.</p>
+  <!-- Genome -->
+  <section id="genome">
+    <p class="section-label">THE GENOME</p>
+    <div class="card">
+      <p>Every creature carries a 16-character genome that encodes everything about it. Something like <span class="hi">AX3#KRONB!YQ2@ZM</span>. Each character is a gene. Where a character falls in the gene pool determines its value, near the start means low, near the end means high.</p>
+      <p>You can copy a genome by pressing <span class="hi">C</span> on any creature, paste it with <span class="hi">P</span>, or write a custom genome with <span class="hi">B</span>. Children inherit mutated copies of their parent's genome. Most mutations are tiny. Occasionally they are dramatic.</p>
+
+      <h3 class="sub">Gene Positions</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>POSITIONS</th><th>TRAIT</th><th>WHAT IT DOES</th></tr>
+          <tr><td>0 – 1</td><td>Diet</td><td>Low = herbivore, mid = omnivore, high = carnivore</td></tr>
+          <tr><td>2 – 4</td><td>Metabolism</td><td>Fast burners age quickly but process energy fast</td></tr>
+          <tr><td>5 – 7</td><td>Aggression</td><td>High = harder to crowd out, better at hunting</td></tr>
+          <tr><td>8 – 10</td><td>Resilience</td><td>Resistance to hazards, biome penalties, old age</td></tr>
+          <tr><td>11 – 13</td><td>Sociability</td><td>High = thrives in crowds, low = thrives alone</td></tr>
+          <tr><td>14 – 15</td><td>Appearance</td><td>Determines the ASCII glyph the creature renders as</td></tr>
+          <tr><td>15</td><td>Diurnal</td><td>High = active in day, low = active at night</td></tr>
+        </table>
       </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Diet -->
+  <section id="diet">
+    <p class="section-label">DIET</p>
+    <div class="diet-grid">
+      <div class="card">
+        <p class="biome-name" style="color:#64FF00; margin-bottom:0.5rem;">HERBIVORE</p>
+        <p style="font-size:12px;">Eat biome food at 1.6× the base rate. Efficient, peaceful, industrious; the best builders. Terrible hunters. Survive by being numerous. When carnivores arrive, they collapse.</p>
+      </div>
+      <div class="card">
+        <p class="biome-name" style="color:#FFB830; margin-bottom:0.5rem;">OMNIVORE</p>
+        <p style="font-size:12px;">The generalists. Base food rate plus moderate predation energy. Build at normal pace. Can survive almost anywhere. Most starting populations are majority omnivore.</p>
+      </div>
+      <div class="card">
+        <p class="biome-name" style="color:#FF3296; margin-bottom:0.5rem;">CARNIVORE</p>
+        <p style="font-size:12px;">2× energy from kills. Gain almost nothing from biome food. Hunt the 8 neighboring cells each tick. Get a 1.5× hunt bonus at night. A world of pure carnivores always collapses; they need prey.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <h3 class="sub">Energy &amp; Color</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>COLOR ON GRID</th><th>MEANING</th></tr>
+          <tr><td>Biome color</td><td>Healthy and well-fed</td></tr>
+          <tr><td>Orange</td><td>Low energy (below 35%) - hungry</td></tr>
+          <tr><td>Dark red pulse</td><td>Starving (below 15%) - will die soon</td></tr>
+          <tr><td>Faded red</td><td>Old age (above 75% of max lifespan)</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:0.75rem; font-size:12px;">The world runs on a <span class="hi">300-tick day/night cycle</span>. Day creatures gain bonus energy in daylight, night creatures in the dark. Carnivores get a hunt bonus when the world goes dark.</p>
+    </div>
+  </section>
+
+  <!-- Structures -->
+  <section id="structures">
+    <p class="section-label">STRUCTURES</p>
+    <div class="card" style="margin-bottom:10px;">
+      <p>Creatures harvest materials each tick they survive in a biome, then spend them on structures. Structures decay and will collapse if no creature nearby repairs them. Social creatures (sociability above 0.65) place <strong style="color:var(--cyan); font-weight:normal;">blueprints</strong> on adjacent empty cells, family members automatically contribute materials until the build is funded, then it constructs itself.</p>
+    </div>
+    <div class="tbl-wrap card">
+      <table>
+        <tr><th>STRUCTURE</th><th>GLYPH</th><th>MATERIAL</th><th>EFFECT</th></tr>
+        <tr><td>Void Anchor</td><td style="color:var(--blue)">^</td><td>Void Crystal</td><td>Shields 8 adjacent cells from Void Pulse</td></tr>
+        <tr><td>Neon Spire</td><td style="color:var(--pink)">!</td><td>Neon Resin</td><td>Broadcasts passive energy to all adjacent creatures</td></tr>
+        <tr><td>Data Node</td><td style="color:var(--blue)">#</td><td>Data Shard</td><td>Amplifies fitness and accelerates evolution nearby</td></tr>
+        <tr><td>Chrome Shelter</td><td style="color:var(--silver)">=</td><td>Chrome Dust</td><td>Slows aging for all adjacent creatures</td></tr>
+        <tr><td>Acid Garden</td><td style="color:var(--lime)">*</td><td>Acid Polymer</td><td>Steady energy trickle between flood events</td></tr>
+        <tr><td>Home</td><td style="color:var(--gold)">H</td><td>Any material</td><td>Passive energy + fitness + age reversal. Ancestral location for descendants.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- Cyberspace -->
+  <section id="cyberspace">
+    <p class="section-label">PERSONAL CYBERSPACE</p>
+
+    <div class="lore">
+      Deep in the substrate, past the Void and beneath the Data Reef, there exists a place that the other biomes do not know about. Personal Cyberspace is not a natural biome. It was made. Someone, or something, partitioned a section of the world and filled it with the residue of their own consciousness.
+    </div>
+
+    <div class="card">
+      <h3 class="sub">How It Opens</h3>
+      <p>Cyberspace does not exist at world start. It awakens when evolution goes deep enough, when any creature reaches <span class="hi">generation 40</span> with <span class="hi">25 guided adaptations</span>. A rectangular pocket tears open somewhere on the map, overwriting whatever biome was there. The grid turns deep violet. The ticker reads:</p>
+      <p style="color:var(--violet); margin-top:0.75rem; font-size:13px; letter-spacing:1px;">// SYSTEM BREACH — Personal Cyberspace opened //</p>
+
+      <h3 class="sub">The Shifting Rules</h3>
+      <p>The Conway rules inside Cyberspace rewrite themselves every 60 ticks from a pool of 13 configurations. What kept a creature alive last generation may kill it this one.</p>
+      <div class="tbl-wrap" style="margin-top:0.75rem;">
+        <table class="rule-table">
+          <tr><th>RULE</th><th>CHARACTER</th></tr>
+          <tr><td>STANDARD</td><td>Base reality bleeds through</td></tr>
+          <tr><td>LABYRINTH</td><td>Corridors form and collapse</td></tr>
+          <tr><td>CORAL</td><td>Growth spirals outward forever</td></tr>
+          <tr><td>ANNEAL</td><td>Only the perfectly dense survive</td></tr>
+          <tr><td>WALLED CITIES</td><td>Fortresses rise then siege each other</td></tr>
+          <tr><td>AMOEBA</td><td>Formless hunger spreads</td></tr>
+          <tr><td>FRACTAL</td><td>Self-similar at every scale</td></tr>
+          <tr><td>GLITCH</td><td>The rules have stopped making sense</td></tr>
+        </table>
+      </div>
+
+      <h3 class="sub">Memory Fragments</h3>
+      <p>The food source of Cyberspace. Creatures with fewer than 5 guided adaptations gain almost nothing and starve within ~30 ticks. Creatures with 5–14 sustain themselves. Creatures with 15+ feast; memory fragments are the richest food source in the world for lineages that earned the right to eat them.</p>
+
+      <h3 class="sub">Glitch Events</h3>
+      <p>Every 40 ticks one creature inside Cyberspace is selected at random and something happens to it.</p>
+      <div class="glitch-grid">
+        <div class="glitch-chip">
+          <p class="chip-name">TIMESTOP</p>
+          <p>Outside time for 8 ticks. Cannot die from any cause.</p>
+        </div>
+        <div class="glitch-chip">
+          <p class="chip-name">SPLICE</p>
+          <p>Three random genes overwritten instantly. Diet may change. Everything changes.</p>
+        </div>
+        <div class="glitch-chip">
+          <p class="chip-name">TELEPORT</p>
+          <p>Displaced to a random empty cell inside Cyberspace.</p>
+        </div>
+        <div class="glitch-chip">
+          <p class="chip-name">ECHO</p>
+          <p>Spawns a child on an adjacent empty cell regardless of Conway rules.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">The Architect</h3>
+      <p>The first creature to survive <span class="hi">50 continuous ticks</span> inside Cyberspace earns the title <span style="color:var(--violet)">[ARCH]</span>. Its name is prefixed permanently. Its genome is logged. There can only ever be one Architect per session. When you see [ARCH:name] appear in the HUD, find that creature immediately.</p>
+    </div>
+  </section>
 
   <!-- Titles -->
-  <p class="section-label">TITLES</p>
-  <div class="card">
-    <div class="titles-list">
-      <div class="title-row">
-        <span class="title-badge">[ELDER]</span>
-        <span class="title-desc">Oldest living creature in the world right now</span>
+  <section id="titles">
+    <p class="section-label">TITLES</p>
+    <div class="card">
+      <p style="margin-bottom:1rem;">Certain creatures earn title tags shown next to their name in the HUD and detail panel. Dynamic titles update every tick, only one creature holds each at a time. Permanent titles are awarded once and never transferred.</p>
+
+      <h3 class="sub">Dynamic</h3>
+      <div class="titles-list">
+        <div class="title-row"><span class="title-key">[ELDER]</span><span class="title-val">Oldest living creature in the world right now</span></div>
+        <div class="title-row"><span class="title-key">[SAGE]</span><span class="title-val">Highest accumulated fitness score</span></div>
+        <div class="title-row"><span class="title-key">[HUNTER]</span><span class="title-val">Most kills recorded</span></div>
+        <div class="title-row"><span class="title-key">[WANDERER]</span><span class="title-val">Visited the most distinct biomes</span></div>
+        <div class="title-row"><span class="title-key">[BUILDER]</span><span class="title-val">Built or contributed to the most structures</span></div>
       </div>
-      <div class="title-row">
-        <span class="title-badge">[SAGE]</span>
-        <span class="title-desc">Highest accumulated fitness score</span>
-      </div>
-      <div class="title-row">
-        <span class="title-badge">[HUNTER]</span>
-        <span class="title-desc">Most kills recorded</span>
-      </div>
-      <div class="title-row">
-        <span class="title-badge">[WANDERER]</span>
-        <span class="title-desc">Visited the most distinct biomes</span>
-      </div>
-      <div class="title-row">
-        <span class="title-badge">[BUILDER]</span>
-        <span class="title-desc">Built or contributed to the most structures</span>
-      </div>
-      <div class="title-row">
-        <span class="title-badge">[SURVIVOR]</span>
-        <span class="title-desc">First creature to survive an Acid Flood <span class="perm">permanent</span></span>
-      </div>
-      <div class="title-row">
-        <span class="title-badge">[FOUNDER]</span>
-        <span class="title-desc">First creature to build a Home <span class="perm">permanent</span></span>
-      </div>
-      <div class="title-row" style="border:none">
-        <span class="title-badge">[ARCH]</span>
-        <span class="title-desc">Survived 50 continuous ticks inside Personal Cyberspace <span class="perm">permanent</span></span>
+
+      <h3 class="sub">Permanent</h3>
+      <div class="titles-list">
+        <div class="title-row"><span class="title-key">[FOUNDER]</span><span class="title-val">First creature to build a Home <span class="perm">permanent</span></span></div>
+        <div class="title-row"><span class="title-key">[SURVIVOR]</span><span class="title-val">First creature to survive an Acid Flood <span class="perm">permanent</span></span></div>
+        <div class="title-row"><span class="title-key">[ARCH]</span><span class="title-val">Survived 50 continuous ticks inside Cyberspace <span class="perm">permanent</span></span></div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Modes -->
-  <p class="section-label">GAME MODES</p>
-  <div class="card">
-    <div class="modes-list">
-      <div class="mode-row">
-        <span class="mode-icon" style="color:#00FFB4">@ CLASSIC</span>
-        <span class="mode-desc">The standard experience. Five biomes. Watch life find its shape.</span>
+  <section id="modes">
+    <p class="section-label">GAME MODES</p>
+    <div class="card" style="margin-bottom:10px;">
+      <p>Select a mode from the title screen using the arrow keys. Most modes are locked at first and must be unlocked through play. Unlock progress persists between sessions.</p>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-header">
+        <span class="mode-icon" style="color:var(--cyan)">@</span>
+        <span class="mode-name">CLASSIC</span>
+        <span class="mode-lock">always available</span>
       </div>
-      <div class="mode-row">
-        <span class="mode-icon" style="color:#FF3296">% VOLATILE</span>
-        <span class="mode-desc">Tripled mutation rate. Hazards twice as frequent. Genomes drift fast. Expect mass extinctions and sudden blooms.</span>
+      <p class="mode-desc">The standard experience. Five biomes, standard Conway rules, normal pacing. Everything in this document describes Classic mode.</p>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-header">
+        <span class="mode-icon" style="color:var(--pink)">%</span>
+        <span class="mode-name">VOLATILE</span>
+        <span class="mode-lock">unlock: reach tick 2000</span>
       </div>
-      <div class="mode-row">
-        <span class="mode-icon" style="color:#C8C8C8">- DEEP TIME</span>
-        <span class="mode-desc">Creatures live for minutes. Slow tick rate. Evolution is visible across real time. Watch lineages diverge.</span>
+      <p class="mode-desc">Mutation rate tripled. Hazard cooldowns cut to 45% of normal. Acid Floods arrive every hundred ticks. Genomes drift fast. Mass extinctions are common. So are sudden population explosions. Volatile rewards watching, not planning.</p>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-header">
+        <span class="mode-icon" style="color:var(--silver)">-</span>
+        <span class="mode-name">DEEP TIME</span>
+        <span class="mode-lock">unlock: generation 50</span>
       </div>
-      <div class="mode-row">
-        <span class="mode-icon" style="color:#64FF00"># OVERPOPULATED</span>
-        <span class="mode-desc">Up to 2000 creatures. Resources thin. Competition constant. Structures matter more than anywhere else.</span>
+      <p class="mode-desc">Slow tick rate. Max age raised to 2000 ticks. A creature with max age 2000 can live for over 16 real-time minutes. Evolution is visible in Deep Time in a way it never is in other modes. You can watch a lineage specialize over hours.</p>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-header">
+        <span class="mode-icon" style="color:var(--lime)">#</span>
+        <span class="mode-name">OVERPOPULATED</span>
+        <span class="mode-lock">unlock: build 20 structures</span>
       </div>
-      <div class="mode-row">
-        <span class="mode-icon" style="color:#00C8FF">. VOID ONLY</span>
-        <span class="mode-desc">A single biome. The empty dark. No shelter, no variety. What survives here truly earned it.</span>
+      <p class="mode-desc">Population target raised to 2000. The grid is dense from tick one and never quiets down. Resources are thin. Competition is constant. Structures matter more here than in any other mode.</p>
+    </div>
+
+    <div class="mode-card">
+      <div class="mode-header">
+        <span class="mode-icon" style="color:var(--blue)">.</span>
+        <span class="mode-name">VOID ONLY</span>
+        <span class="mode-lock">unlock: crown an Architect</span>
+      </div>
+      <p class="mode-desc">A single biome covers the entire world. No Data Reef, no Acid Delta, no Chrome Flats. Only the Void. What survives here evolved for exactly this, nothing, and earned every tick.</p>
+    </div>
+  </section>
+
+  <!-- Daemon -->
+  <section id="daemon">
+    <p class="section-label">DAEMON MODE</p>
+
+    <div class="lore">
+      Something is still running in the old substrate. Not creatures, those evolved on their own. Not Cyberspace, that was built deliberately. Something older. Background threads that never terminated when the original system went dark. You found the command interface. You can issue directives.
+    </div>
+
+    <div class="card">
+      <p>Daemon Mode is a completely different game built into NECROBIOME. You control named, persistent <span class="hi">Daemons</span> - processes running in a tile-based substrate world. They have no genome and do not evolve. They execute your directives: move, harvest fauna for data, rest at relay nodes, or walk patrol routes.</p>
+      <p style="margin-top:0.75rem;">Unlock condition: crown an Architect <em>and</em> build a Home in the same session.</p>
+
+      <h3 class="sub">Daemon Stats</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>STAT</th><th>DESCRIPTION</th></tr>
+          <tr><td>PRIORITY</td><td>Process priority 0–100%. Drains constantly. Recovered at RELAY tiles and from harvesting. Drops to 15% → forced rest.</td></tr>
+          <tr><td>MEMORY</td><td>Stored data, 0–999 units. Gained from harvesting fauna.</td></tr>
+          <tr><td>SPEED</td><td>Movement rate in tiles per tick at full priority.</td></tr>
+          <tr><td>STRENGTH</td><td>Harvest rate and yield modifier.</td></tr>
+          <tr><td>FOCUS</td><td>Task reliability. Less priority drain from working.</td></tr>
+        </table>
+      </div>
+
+      <h3 class="sub">The World</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>TILE</th><th>GLYPH</th><th>DESCRIPTION</th></tr>
+          <tr><td>FLOOR</td><td>.</td><td>Open substrate. Fully walkable.</td></tr>
+          <tr><td>WALL</td><td>#</td><td>Solid, impassable. Ancient structures.</td></tr>
+          <tr><td>WATER</td><td>~</td><td>Liquid data channel. Daemons move slowly here.</td></tr>
+          <tr><td>SOIL</td><td>,</td><td>Fertile. Bugs and spores spawn here.</td></tr>
+          <tr><td>RUIN</td><td>%</td><td>Collapsed wall. Walkable but slow. Crawlers live here.</td></tr>
+          <tr><td>RELAY</td><td>@</td><td>Data relay node. Priority recovers rapidly here.</td></tr>
+          <tr><td>FLORA</td><td>&amp;</td><td>Living data-organisms. Spores and bugs feed here.</td></tr>
+        </table>
+      </div>
+
+      <h3 class="sub">Fauna</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>FAUNA</th><th>GLYPH</th><th>HABITAT</th><th>DATA YIELD</th></tr>
+          <tr><td>BUG</td><td>.</td><td>Soil, Flora</td><td>8 units</td></tr>
+          <tr><td>FISH</td><td>~</td><td>Water</td><td>15 units</td></tr>
+          <tr><td>CRAWLER</td><td>c</td><td>Ruin, Floor</td><td>22 units</td></tr>
+          <tr><td>SPORE</td><td>*</td><td>Flora, Soil</td><td>5 units</td></tr>
+        </table>
+      </div>
+
+      <h3 class="sub">Daemon Controls</h3>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">ARROWS / WASD</span><span class="ctrl-act">move camera</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Left-click tile</span><span class="ctrl-act">move selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Left-click Daemon</span><span class="ctrl-act">select that Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Right-click fauna</span><span class="ctrl-act">assign HARVEST</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Tab</span><span class="ctrl-act">cycle selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">H</span><span class="ctrl-act">harvest at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">rest at nearest Relay</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">enter / confirm patrol mode</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">clear directive queue</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Space</span><span class="ctrl-act">pause / unpause</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Q</span><span class="ctrl-act">quit to title screen</span></div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- Controls -->
-  <p class="section-label">CONTROLS</p>
-  <div class="card">
-    <div class="controls-grid">
-      <div class="ctrl-row"><span class="ctrl-key">ARROWS / WASD</span><span class="ctrl-action">move camera</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">SCROLL</span><span class="ctrl-action">zoom in / out</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">I</span><span class="ctrl-action">inspect creature</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">C</span><span class="ctrl-action">copy genome</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">B</span><span class="ctrl-action">enter genome</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">N</span><span class="ctrl-action">rename creature</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">K</span><span class="ctrl-action">kill creature</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">F / G</span><span class="ctrl-action">speed up / slow down</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">SPACE</span><span class="ctrl-action">pause / unpause</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-action">randomize world</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">SHIFT+S</span><span class="ctrl-action">save world</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">SHIFT+L</span><span class="ctrl-action">load world</span></div>
-      <div class="ctrl-row"><span class="ctrl-key">Q</span><span class="ctrl-action">quit</span></div>
+  <section id="controls">
+    <p class="section-label">CONTROLS</p>
+    <div class="card">
+      <h3 class="sub">Movement &amp; Camera</h3>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">ARROWS / WASD</span><span class="ctrl-act">move cursor around the grid</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Click</span><span class="ctrl-act">move cursor, open detail panel</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Scroll / +/-</span><span class="ctrl-act">zoom in / out</span></div>
+      </div>
+
+      <h3 class="sub">Simulation</h3>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">Space</span><span class="ctrl-act">pause / unpause</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">F / G</span><span class="ctrl-act">speed up / slow down</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">randomize world</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Shift+S</span><span class="ctrl-act">save world</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Shift+L</span><span class="ctrl-act">load world</span></div>
+      </div>
+
+      <h3 class="sub">Creatures &amp; Genomes</h3>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">I</span><span class="ctrl-act">open / close detail panel</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">C</span><span class="ctrl-act">copy genome under cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">B</span><span class="ctrl-act">enter a custom genome</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">paste copied genome</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">N</span><span class="ctrl-act">rename creature under cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">K</span><span class="ctrl-act">kill creature under cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">X</span><span class="ctrl-act">demolish structure under cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Q / Escape</span><span class="ctrl-act">quit</span></div>
+      </div>
+
+      <h3 class="sub">Command Bar</h3>
+      <p style="font-size:12px; margin-bottom:0.75rem;">Pressing B, P, or N opens an in-window command bar instead of a dialog. The game pauses while it is open.</p>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">Any key</span><span class="ctrl-act">type into input buffer</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Backspace</span><span class="ctrl-act">delete last character</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Enter</span><span class="ctrl-act">confirm and execute</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">cancel and resume</span></div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Coming Soon -->
-  <p class="section-label">AVAILABILITY</p>
-  <div class="card" style="text-align: center; padding: 2.5rem 2rem;">
-    <p style="color: var(--pink); font-size: 13px; letter-spacing: 3px; margin-bottom: 0.75rem;">// COMING SOON //</p>
-    <p style="color: var(--dim); font-size: 12px; line-height: 1.9;">
-      NECROBIOME is currently in active development.<br>
-      More information will be available here when it's ready.
-    </p>
-  </div>
+  <!-- Watch For -->
+  <section id="watch">
+    <p class="section-label">THINGS TO WATCH FOR</p>
+    <div class="card">
+      <div class="watch-item">
+        <strong>The first Acid Flood</strong>
+        <p>Around tick 220, the Acid Delta erupts. A wave of deaths followed by a green energy surge across the survivors. Watch their children, they inherit the strength.</p>
+      </div>
+      <div class="watch-item">
+        <strong>Carnivores at night</strong>
+        <p>Zoom into the Neon Wastes during the dark phase. If there is a healthy carnivore population you will see them hunting. Creatures go orange, then red, then vanish.</p>
+      </div>
+      <div class="watch-item">
+        <strong>The first Home</strong>
+        <p>Around tick 400–500, a social creature with enough materials places the first H. It glows gold. Press I on it. Read how old it is. Read its lineage depth.</p>
+      </div>
+      <div class="watch-item">
+        <strong>A Blueprint being funded</strong>
+        <p>A dim outline glyph on an empty cell, slowly brightening over dozens of ticks. Nearby creatures are contributing materials. When it reaches full brightness, the structure appears instantly.</p>
+      </div>
+      <div class="watch-item">
+        <strong>Biome border wars</strong>
+        <p>The boundary between Acid Delta and Chrome Flats. Resilient aggressive creatures on one side, slow stable ones on the other. The border shifts over hundreds of ticks.</p>
+      </div>
+      <div class="watch-item">
+        <strong>The Cyberspace breach</strong>
+        <p>Watch the ticker. When a lineage reaches generation 40 with 25 adaptations, a violet rectangle tears open somewhere on the map. Move to it. The glyphs inside are Greek letters. The rules change every 60 ticks.</p>
+      </div>
+      <div class="watch-item">
+        <strong>A Splice event</strong>
+        <p>A creature inside Cyberspace suddenly changes glyph. Its genome was rewritten mid-life. Press I immediately. Look at the new traits. It is still the same creature. The world just rewrote what that means.</p>
+      </div>
+      <div class="watch-item">
+        <strong>The Architect being crowned</strong>
+        <p>[ARCH:name] appears in the HUD. That creature survived 50 ticks inside Cyberspace across rule shifts, glitch events, and starvation. Find it. Read its genome. That genome survived something.</p>
+      </div>
+      <div class="watch-item">
+        <strong>Genome drift</strong>
+        <p>Copy a creature's genome at tick 100. Let the simulation run to tick 1000. Find a descendant. Compare the genomes. The drift is the entire story of what happened in between.</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- Footer -->
   <footer>
     <p>NECROBIOME is an open simulation. It does not have a win state.</p>
     <p>It has only the next tick. And the tick after that.</p>
@@ -516,54 +914,72 @@
 </div>
 
 <script>
+// ── Particles ──
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
-const chars = '.·:,~-+*@#%';
+const chars = '.·:,~-+*@#%ΨΩΔ';
 const particles = [];
 
-function resize() {
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
 
-for (let i = 0; i < 80; i++) {
+const COLORS = [
+  [0, 200, 140],   // cyan-green
+  [200, 0, 100],   // pink
+  [0, 150, 220],   // blue
+  [140, 0, 200],   // violet
+];
+
+for (let i = 0; i < 90; i++) {
+  const c = COLORS[Math.floor(Math.random() * COLORS.length)];
   particles.push({
     x:  Math.random(),
     y:  Math.random(),
-    vx: (Math.random() - 0.5) * 0.0002,
-    vy: (Math.random() - 0.5) * 0.0002,
+    vx: (Math.random() - 0.5) * 0.00018,
+    vy: (Math.random() - 0.5) * 0.00018,
     ch: chars[Math.floor(Math.random() * chars.length)],
-    br: Math.random() * 0.25 + 0.12,
+    br: Math.random() * 0.22 + 0.10,
+    r: c[0], g: c[1], b: c[2],
   });
 }
 
-function draw() {
+function drawParticles() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.font = '11px "Share Tech Mono", monospace';
   for (const p of particles) {
     p.x = (p.x + p.vx + 1) % 1;
     p.y = (p.y + p.vy + 1) % 1;
-    const v = Math.floor(p.br * 255);
-    // Mix of cyan-green and pink-magenta tones
-    const hue = Math.random() > 0.8 ? `rgb(${v},${Math.floor(v*0.2)},${Math.floor(v*0.6)})` : `rgb(0,${v},${Math.floor(v*0.7)})`;
-    ctx.fillStyle = hue;
+    const v = p.br;
+    ctx.fillStyle = `rgba(${p.r},${p.g},${p.b},${v})`;
     ctx.fillText(p.ch, p.x * canvas.width, p.y * canvas.height);
   }
-  requestAnimationFrame(draw);
+  requestAnimationFrame(drawParticles);
 }
-draw();
+drawParticles();
 
-// Stagger biome card animations
+// ── Active nav highlight on scroll ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks  = document.querySelectorAll('nav a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+
+// ── Stagger biome cards ──
 document.querySelectorAll('.biome-card').forEach((el, i) => {
   el.style.opacity = '0';
-  el.style.transform = 'translateY(16px)';
-  el.style.transition = `opacity 0.5s ease ${0.1 + i * 0.08}s, transform 0.5s ease ${0.1 + i * 0.08}s, border-color 0.2s, box-shadow 0.2s`;
-  setTimeout(() => {
-    el.style.opacity = '1';
-    el.style.transform = 'none';
-  }, 100 + i * 80);
+  el.style.transform = 'translateY(14px)';
+  el.style.transition = `opacity 0.45s ease ${0.05 + i * 0.07}s, transform 0.45s ease ${0.05 + i * 0.07}s, border-color 0.2s`;
+  setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 80 + i * 70);
 });
 </script>
 </body>
