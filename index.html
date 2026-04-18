@@ -458,7 +458,15 @@ footer {
     </div>
     <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 2 8</p>
     <p class="tagline">"In the neon dark, life finds a genome."</p>
-    <div class="coming-soon">// COMING SOON //</div>
+    <div style="margin-top:1.75rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; animation:fadeup 0.8s ease 0.6s both;">
+  <a href="https://github.com/virtualbugfood/necrobiome-info/releases/download/PB/NECROBIOME.exe"
+     style="display:inline-block; padding:0.75rem 2.5rem; background:var(--cyan); color:#02020C; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:2px; border-radius:6px; text-decoration:none; transition:background 0.2s, transform 0.15s;"
+     onmouseover="this.style.background='#00DD99'; this.style.transform='translateY(-2px)'"
+     onmouseout="this.style.background='var(--cyan)'; this.style.transform='none'">
+    DOWNLOAD // WINDOWS
+  </a>
+  <p style="color:#336655; font-size:10px; letter-spacing:1px;">v0.28 · Windows 10/11 · No installation required</p>
+</div>
   </div>
 
   <!-- Ticker -->
@@ -473,7 +481,7 @@ footer {
     <p class="section-label">WHAT IS THIS</p>
     <div class="card intro">
       <p>NECROBIOME is a <span class="hi">cyberpunk Conway's Game of Life simulator</span> where every cell is a unique creature with its own genome, diet, energy, memories, and ambitions.</p>
-      <p>In the original Game of Life every cell is identical, alive or dead, nothing more. In NECROBIOME every live cell is a creature with a 16-character genome encoding its diet, metabolism, aggression, resilience, and sociability. The Conway birth and death rules still apply, but they are bent and broken by who these creatures are and where they live.</p>
+      <p>In the original Game of Life every cell is identical -- alive or dead, nothing more. In NECROBIOME every live cell is a creature with a 16-character genome encoding its diet, metabolism, aggression, resilience, and sociability. The Conway birth and death rules still apply, but they are bent and broken by who these creatures are and where they live.</p>
       <p>They are born. They eat. They build. They hunt. They grow old. They die. Some of them learn. Some evolve into something you have never seen before.</p>
       <p>You did not design them. You cannot fully control them. You can only <span class="hi2">watch, intervene, and wonder.</span></p>
     </div>
@@ -483,7 +491,7 @@ footer {
   <section id="biomes">
     <p class="section-label">THE BIOMES</p>
     <div class="card" style="margin-bottom:10px;">
-      <p>Five natural biomes are painted across the grid using layered noise. Boundaries are soft and organic. Creatures that survive long enough in one biome develop traits suited to it. A sixth biome, Personal Cyberspace, does not exist at world start and must be unlocked through evolution.</p>
+      <p>Five natural biomes are painted across the grid using layered noise. Boundaries are soft and organic. Creatures that survive long enough in one biome develop traits suited to it. A sixth biome -- Personal Cyberspace -- does not exist at world start and must be unlocked through evolution.</p>
     </div>
     <div class="biome-grid">
       <div class="biome-card void">
@@ -492,7 +500,7 @@ footer {
         <div class="biome-meta">
           <div>Food: dark energy radiation</div>
           <div>Best trait: Resilience</div>
-          <div class="hazard-tag" style="color:#004433">VOID PULSE - every 250 ticks</div>
+          <div class="hazard-tag" style="color:#004433">VOID PULSE -- every 250 ticks</div>
         </div>
       </div>
       <div class="biome-card neon">
@@ -501,7 +509,7 @@ footer {
         <div class="biome-meta">
           <div>Food: neon fungi</div>
           <div>Best trait: Aggression</div>
-          <div class="hazard-tag" style="color:#330015">NEON STORM - every 200 ticks</div>
+          <div class="hazard-tag" style="color:#330015">NEON STORM -- every 200 ticks</div>
         </div>
       </div>
       <div class="biome-card reef">
@@ -510,7 +518,7 @@ footer {
         <div class="biome-meta">
           <div>Food: data plankton</div>
           <div>Best trait: Sociability</div>
-          <div class="hazard-tag" style="color:#002233">DATA SURGE - every 180 ticks</div>
+          <div class="hazard-tag" style="color:#002233">DATA SURGE -- every 180 ticks</div>
         </div>
       </div>
       <div class="biome-card chrome">
@@ -519,7 +527,7 @@ footer {
         <div class="biome-meta">
           <div>Food: chrome moss</div>
           <div>Best trait: Low metabolism</div>
-          <div class="hazard-tag" style="color:#222222">CHROME LOCK - every 350 ticks</div>
+          <div class="hazard-tag" style="color:#222222">CHROME LOCK -- every 350 ticks</div>
         </div>
       </div>
       <div class="biome-card acid">
@@ -528,7 +536,7 @@ footer {
         <div class="biome-meta">
           <div>Food: acid blooms</div>
           <div>Best trait: Resilience</div>
-          <div class="hazard-tag" style="color:#1A3300">ACID FLOOD - every 220 ticks</div>
+          <div class="hazard-tag" style="color:#1A3300">ACID FLOOD -- every 220 ticks</div>
         </div>
       </div>
       <div class="biome-card cyber">
@@ -537,7 +545,7 @@ footer {
         <div class="biome-meta" style="border-color:#1A0040; color:#330055;">
           <div>Food: memory fragments</div>
           <div>Best trait: Adaptations</div>
-          <div class="hazard-tag" style="color:#2A0055">GLITCH - every 40 ticks</div>
+          <div class="hazard-tag" style="color:#2A0055">GLITCH -- every 40 ticks</div>
         </div>
       </div>
     </div>
@@ -547,7 +555,7 @@ footer {
   <section id="genome">
     <p class="section-label">THE GENOME</p>
     <div class="card">
-      <p>Every creature carries a 16-character genome that encodes everything about it. Something like <span class="hi">AX3#KRONB!YQ2@ZM</span>. Each character is a gene. Where a character falls in the gene pool determines its value, near the start means low, near the end means high.</p>
+      <p>Every creature carries a 16-character genome that encodes everything about it. Something like <span class="hi">AX3#KRONB!YQ2@ZM</span>. Each character is a gene. Where a character falls in the gene pool determines its value -- near the start means low, near the end means high.</p>
       <p>You can copy a genome by pressing <span class="hi">C</span> on any creature, paste it with <span class="hi">P</span>, or write a custom genome with <span class="hi">B</span>. Children inherit mutated copies of their parent's genome. Most mutations are tiny. Occasionally they are dramatic.</p>
 
       <h3 class="sub">Gene Positions</h3>
@@ -572,7 +580,7 @@ footer {
     <div class="diet-grid">
       <div class="card">
         <p class="biome-name" style="color:#64FF00; margin-bottom:0.5rem;">HERBIVORE</p>
-        <p style="font-size:12px;">Eat biome food at 1.6× the base rate. Efficient, peaceful, industrious; the best builders. Terrible hunters. Survive by being numerous. When carnivores arrive, they collapse.</p>
+        <p style="font-size:12px;">Eat biome food at 1.6× the base rate. Efficient, peaceful, industrious -- the best builders. Terrible hunters. Survive by being numerous. When carnivores arrive, they collapse.</p>
       </div>
       <div class="card">
         <p class="biome-name" style="color:#FFB830; margin-bottom:0.5rem;">OMNIVORE</p>
@@ -580,7 +588,7 @@ footer {
       </div>
       <div class="card">
         <p class="biome-name" style="color:#FF3296; margin-bottom:0.5rem;">CARNIVORE</p>
-        <p style="font-size:12px;">2× energy from kills. Gain almost nothing from biome food. Hunt the 8 neighboring cells each tick. Get a 1.5× hunt bonus at night. A world of pure carnivores always collapses; they need prey.</p>
+        <p style="font-size:12px;">2× energy from kills. Gain almost nothing from biome food. Hunt the 8 neighboring cells each tick. Get a 1.5× hunt bonus at night. A world of pure carnivores always collapses -- they need prey.</p>
       </div>
     </div>
 
@@ -590,8 +598,8 @@ footer {
         <table>
           <tr><th>COLOR ON GRID</th><th>MEANING</th></tr>
           <tr><td>Biome color</td><td>Healthy and well-fed</td></tr>
-          <tr><td>Orange</td><td>Low energy (below 35%) - hungry</td></tr>
-          <tr><td>Dark red pulse</td><td>Starving (below 15%) - will die soon</td></tr>
+          <tr><td>Orange</td><td>Low energy (below 35%) -- hungry</td></tr>
+          <tr><td>Dark red pulse</td><td>Starving (below 15%) -- will die soon</td></tr>
           <tr><td>Faded red</td><td>Old age (above 75% of max lifespan)</td></tr>
         </table>
       </div>
@@ -603,7 +611,7 @@ footer {
   <section id="structures">
     <p class="section-label">STRUCTURES</p>
     <div class="card" style="margin-bottom:10px;">
-      <p>Creatures harvest materials each tick they survive in a biome, then spend them on structures. Structures decay and will collapse if no creature nearby repairs them. Social creatures (sociability above 0.65) place <strong style="color:var(--cyan); font-weight:normal;">blueprints</strong> on adjacent empty cells, family members automatically contribute materials until the build is funded, then it constructs itself.</p>
+      <p>Creatures harvest materials each tick they survive in a biome, then spend them on structures. Structures decay and will collapse if no creature nearby repairs them. Social creatures (sociability above 0.65) place <strong style="color:var(--cyan); font-weight:normal;">blueprints</strong> on adjacent empty cells -- family members automatically contribute materials until the build is funded, then it constructs itself.</p>
     </div>
     <div class="tbl-wrap card">
       <table>
@@ -623,13 +631,13 @@ footer {
     <p class="section-label">PERSONAL CYBERSPACE</p>
 
     <div class="lore">
-      Deep in the substrate, past the Void and beneath the Data Reef, there exists a place that the other biomes do not know about. Personal Cyberspace is not a natural biome. It was made. Someone, or something, partitioned a section of the world and filled it with the residue of their own consciousness.
+      Deep in the substrate, past the Void and beneath the Data Reef, there exists a place that the other biomes do not know about. Personal Cyberspace is not a natural biome. It was made. Someone -- or something -- partitioned a section of the world and filled it with the residue of their own consciousness.
     </div>
 
     <div class="card">
       <h3 class="sub">How It Opens</h3>
-      <p>Cyberspace does not exist at world start. It awakens when evolution goes deep enough, when any creature reaches <span class="hi">generation 40</span> with <span class="hi">25 guided adaptations</span>. A rectangular pocket tears open somewhere on the map, overwriting whatever biome was there. The grid turns deep violet. The ticker reads:</p>
-      <p style="color:var(--violet); margin-top:0.75rem; font-size:13px; letter-spacing:1px;">// SYSTEM BREACH — Personal Cyberspace opened //</p>
+      <p>Cyberspace does not exist at world start. It awakens when evolution goes deep enough -- when any creature reaches <span class="hi">generation 40</span> with <span class="hi">25 guided adaptations</span>. A rectangular pocket tears open somewhere on the map, overwriting whatever biome was there. The grid turns deep violet. The ticker reads:</p>
+      <p style="color:var(--violet); margin-top:0.75rem; font-size:13px; letter-spacing:1px;">// SYSTEM BREACH -- Personal Cyberspace opened //</p>
 
       <h3 class="sub">The Shifting Rules</h3>
       <p>The Conway rules inside Cyberspace rewrite themselves every 60 ticks from a pool of 13 configurations. What kept a creature alive last generation may kill it this one.</p>
@@ -648,7 +656,7 @@ footer {
       </div>
 
       <h3 class="sub">Memory Fragments</h3>
-      <p>The food source of Cyberspace. Creatures with fewer than 5 guided adaptations gain almost nothing and starve within ~30 ticks. Creatures with 5–14 sustain themselves. Creatures with 15+ feast; memory fragments are the richest food source in the world for lineages that earned the right to eat them.</p>
+      <p>The food source of Cyberspace. Creatures with fewer than 5 guided adaptations gain almost nothing and starve within ~30 ticks. Creatures with 5–14 sustain themselves. Creatures with 15+ feast -- memory fragments are the richest food source in the world for lineages that earned the right to eat them.</p>
 
       <h3 class="sub">Glitch Events</h3>
       <p>Every 40 ticks one creature inside Cyberspace is selected at random and something happens to it.</p>
@@ -680,7 +688,7 @@ footer {
   <section id="titles">
     <p class="section-label">TITLES</p>
     <div class="card">
-      <p style="margin-bottom:1rem;">Certain creatures earn title tags shown next to their name in the HUD and detail panel. Dynamic titles update every tick, only one creature holds each at a time. Permanent titles are awarded once and never transferred.</p>
+      <p style="margin-bottom:1rem;">Certain creatures earn title tags shown next to their name in the HUD and detail panel. Dynamic titles update every tick -- only one creature holds each at a time. Permanent titles are awarded once and never transferred.</p>
 
       <h3 class="sub">Dynamic</h3>
       <div class="titles-list">
@@ -749,7 +757,7 @@ footer {
         <span class="mode-name">VOID ONLY</span>
         <span class="mode-lock">unlock: crown an Architect</span>
       </div>
-      <p class="mode-desc">A single biome covers the entire world. No Data Reef, no Acid Delta, no Chrome Flats. Only the Void. What survives here evolved for exactly this, nothing, and earned every tick.</p>
+      <p class="mode-desc">A single biome covers the entire world. No Data Reef, no Acid Delta, no Chrome Flats. Only the Void. What survives here evolved for exactly this -- nothing -- and earned every tick.</p>
     </div>
   </section>
 
@@ -758,11 +766,11 @@ footer {
     <p class="section-label">DAEMON MODE</p>
 
     <div class="lore">
-      Something is still running in the old substrate. Not creatures, those evolved on their own. Not Cyberspace, that was built deliberately. Something older. Background threads that never terminated when the original system went dark. You found the command interface. You can issue directives.
+      Something is still running in the old substrate. Not creatures -- those evolved on their own. Not Cyberspace -- that was built deliberately. Something older. Background threads that never terminated when the original system went dark. You found the command interface. You can issue directives.
     </div>
 
     <div class="card">
-      <p>Daemon Mode is a completely different game built into NECROBIOME. You control named, persistent <span class="hi">Daemons</span> - processes running in a tile-based substrate world. They have no genome and do not evolve. They execute your directives: move, harvest fauna for data, rest at relay nodes, or walk patrol routes.</p>
+      <p>Daemon Mode is a completely different game built into NECROBIOME. You control named, persistent <span class="hi">Daemons</span> -- processes running in a tile-based substrate world. They have no genome and do not evolve. They execute your directives: move, harvest fauna for data, rest at relay nodes, or walk patrol routes.</p>
       <p style="margin-top:0.75rem;">Unlock condition: crown an Architect <em>and</em> build a Home in the same session.</p>
 
       <h3 class="sub">Daemon Stats</h3>
@@ -868,7 +876,7 @@ footer {
     <div class="card">
       <div class="watch-item">
         <strong>The first Acid Flood</strong>
-        <p>Around tick 220, the Acid Delta erupts. A wave of deaths followed by a green energy surge across the survivors. Watch their children, they inherit the strength.</p>
+        <p>Around tick 220, the Acid Delta erupts. A wave of deaths followed by a green energy surge across the survivors. Watch their children -- they inherit the strength.</p>
       </div>
       <div class="watch-item">
         <strong>Carnivores at night</strong>
