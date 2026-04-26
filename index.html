@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NECROBIOME // CELL-SIM v0.35</title>
+<title>NECROBIOME // CELL-SIM v0.43</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -455,16 +455,16 @@ footer {
  ██║ ╚████║███████╗╚██████╗██║  ██║╚██████╔╝██████╔╝██║╚██████╔╝██║ ╚═╝ ██║███████╗
  ╚═╝  ╚═══╝╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝╚═╝     ╚═╝╚══════╝</pre>
     </div>
-    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 3 5</p>
+    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 4 3</p>
     <p class="tagline">"In the neon dark, life finds a genome."</p>
     <div style="margin-top:1.75rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; animation:fadeup 0.8s ease 0.6s both;">
-  <a href="https://github.com/virtualbugfood/necrobiome-info/releases/download/PB3/NECROBIOME.exe"
+  <a href="https://github.com/virtualbugfood/necrobiome-info/releases/download/PB5/NECROBIOME.exe"
      style="display:inline-block; padding:0.75rem 2.5rem; background:var(--cyan); color:#02020C; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:2px; border-radius:6px; text-decoration:none; transition:background 0.2s, transform 0.15s;"
      onmouseover="this.style.background='#00DD99'; this.style.transform='translateY(-2px)'"
      onmouseout="this.style.background='var(--cyan)'; this.style.transform='none'">
     DOWNLOAD // WINDOWS
   </a>
-  <p style="color:#336655; font-size:10px; letter-spacing:1px;">v0.35 · Windows 10/11 · No installation required</p>
+  <p style="color:#336655; font-size:10px; letter-spacing:1px;">v0.43 · Windows 10/11 · No installation required</p>
 </div>
   </div>
 
@@ -768,58 +768,139 @@ footer {
       Something is still running in the old substrate. Not creatures -- those evolved on their own. Not Cyberspace -- that was built deliberately. Something older. Background threads that never terminated when the original system went dark. You found the command interface. You can issue directives.
     </div>
 
+    <div class="card" style="margin-bottom:10px;">
+      <p>Daemon Mode is a completely different game from Classic. You control named <span class="hi">Daemons</span> -- persistent substrate processes with genomes, memories, and relationships -- directing them to explore, harvest, mine, craft, and build in a <span class="hi">210x122 procedurally generated tile world</span> across 11 biomes. The world is different every run.</p>
+      <p style="margin-top:0.75rem; color:#336655;">Unlock: crown an Architect and build a Home in the same Classic session.</p>
+    </div>
+
+    <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">TILES</h3>
+    <div class="tbl-wrap card" style="margin-bottom:10px;">
+      <table>
+        <tr><th>TILE</th><th>GLYPH</th><th>DESCRIPTION</th></tr>
+        <tr><td>FLOOR</td><td style="color:var(--dimmer)">.</td><td>Open substrate, fully walkable.</td></tr>
+        <tr><td>WALL</td><td style="color:var(--silver)">#</td><td>Solid and impassable.</td></tr>
+        <tr><td>WATER</td><td style="color:var(--blue)">~</td><td>Liquid data channel -- Daemons move slowly, fish dwell here.</td></tr>
+        <tr><td>SOIL</td><td style="color:#64A040">,</td><td>Fertile ground where bugs and spores spawn.</td></tr>
+        <tr><td>RUIN</td><td style="color:#A07040">%</td><td>Collapsed structure that can be mined for materials. 17 types.</td></tr>
+        <tr><td>RELAY</td><td style="color:var(--violet)">@</td><td>Natural data relay -- Daemon priority recharges rapidly here.</td></tr>
+        <tr><td>FLORA</td><td style="color:#40A060">&amp;</td><td>Living data-organisms that spores and bugs feed on.</td></tr>
+      </table>
+    </div>
+
+    <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">BIOMES</h3>
+    <div class="biome-grid" style="margin-bottom:10px;">
+      <div class="biome-card void">
+        <p class="biome-name" style="color:#8899AA">VOID MARGIN</p>
+        <p class="biome-desc">The safe starting ring. Sparse, quiet, and forgiving. A good place to get your footing.</p>
+      </div>
+      <div class="biome-card neon">
+        <p class="biome-name" style="color:#CC4466">PROCESSING DISTRICT</p>
+        <p class="biome-desc">Dense ruins and Logic Chips, but Null Hounds patrol and ambient drain punishes idleness.</p>
+      </div>
+      <div class="biome-card reef">
+        <p class="biome-name" style="color:var(--blue)">DATA REEF</p>
+        <p class="biome-desc">The best fishing in the world, passive regen near relays, and rivers cutting through it.</p>
+      </div>
+      <div class="biome-card" style="border-color:#1A0A00;">
+        <p class="biome-name" style="color:#AA6633">THE SCAR</p>
+        <p class="biome-desc">A diagonal wound across the map. Move penalty, Void Wisps that drain priority, Fracture Veins everywhere.</p>
+      </div>
+      <div class="biome-card acid">
+        <p class="biome-name" style="color:#66AA44">THE OVERGROWTH</p>
+        <p class="biome-desc">The richest hunting in any biome, but Thornwire coats every ruin and must be cleared first.</p>
+      </div>
+      <div class="biome-card chrome">
+        <p class="biome-name" style="color:#AAAAAA">ARCHIVE QUARTER</p>
+        <p class="biome-desc">Silent and nearly empty. Almost no fauna, but guaranteed high-value ruin drops including Archive Silk.</p>
+      </div>
+      <div class="biome-card" style="border-color:#001A1A;">
+        <p class="biome-name" style="color:#44AAAA">RELAY NETWORK</p>
+        <p class="biome-desc">Passive priority regen everywhere you stand. The safest place to rest and regroup.</p>
+      </div>
+      <div class="biome-card cyber">
+        <p class="biome-name" style="color:#AA44AA">CONTAINMENT ZONE</p>
+        <p class="biome-desc">Contained Echoes wander the perimeter. The Void Core sits at the center, silent and waiting.</p>
+      </div>
+      <div class="biome-card" style="border-color:#1A0A00;">
+        <p class="biome-name" style="color:#88AA44">FUNGAL DELTA</p>
+        <p class="biome-desc">Corrosive ambient drain and no ruins, but rich in Jelly Fiber and Fungal Silk.</p>
+      </div>
+      <div class="biome-card" style="border-color:#0A0A2A;">
+        <p class="biome-name" style="color:#6666CC">CRYSTAL WASTES</p>
+        <p class="biome-desc">Severe void drain with no ruins. Crystalbacks and Void Serpents make it worth the risk.</p>
+      </div>
+      <div class="biome-card" style="border-color:#001A10;">
+        <p class="biome-name" style="color:#44CC88">SIGNAL MEADOW</p>
+        <p class="biome-desc">Peaceful and restorative. Signal Deer don't flee. Strong passive regen. A rare quiet in a hostile world.</p>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">NOTABLE FAUNA</h3>
+    <div class="tbl-wrap card" style="margin-bottom:10px;">
+      <table>
+        <tr><th>SPECIES</th><th>GLYPH</th><th>HABITAT</th><th>YIELD</th></tr>
+        <tr><td>Pulse Larva</td><td style="color:#AACC44">l</td><td>Soil / Flora</td><td>35 -- becomes Cocoon then Pulsefly</td></tr>
+        <tr><td>Null Hound</td><td style="color:#CC4444">H</td><td>Processing District</td><td>80 -- fast and aggressive, patrols ruins</td></tr>
+        <tr><td>Vaultcrawler</td><td style="color:#AA8833">V</td><td>Deep Ruin</td><td>55 -- stationary, very rare</td></tr>
+        <tr><td>Void Wisp</td><td style="color:#8844AA">w</td><td>The Scar</td><td>30 -- drains priority on contact</td></tr>
+        <tr><td>Signal Deer</td><td style="color:#44CCAA">d</td><td>Signal Meadow</td><td>50 -- peaceful, does not flee</td></tr>
+        <tr><td>Crystalback</td><td style="color:#6688FF">C</td><td>Crystal Wastes</td><td>95 -- rare lifecycle, one Deep Crystal per harvest</td></tr>
+        <tr><td>Void Serpent</td><td style="color:#8855CC">S</td><td>Crystal Wastes</td><td>65 -- fast and rare, yields Serpent Scale</td></tr>
+        <tr><td>Archive Moth</td><td style="color:#AAAACC">m</td><td>Archive Quarter</td><td>40 -- yields Archive Silk, only found here</td></tr>
+        <tr><td>Contained Echo</td><td style="color:#AA44AA">e</td><td>Containment Zone</td><td>35 -- yields Echo Data, only found here</td></tr>
+      </table>
+    </div>
+
+    <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">SYSTEMS</h3>
+    <div class="card" style="margin-bottom:10px;">
+      <div class="two-col">
+        <div class="system-item">
+          <h3>Mining</h3>
+          <p>Press M on a Ruin tile to mine it. 17 ruin types with unique drop tables -- some spawn a RELAY tile on exhaustion, others burst with materials.</p>
+        </div>
+        <div class="system-item">
+          <h3>Crafting</h3>
+          <p>Press C to open the craft menu. 105 recipes, filtered to what you can currently make. A Synthesis Bench gives 30% faster crafting and unlocks advanced recipes.</p>
+        </div>
+        <div class="system-item">
+          <h3>Structures</h3>
+          <p>59 buildable structures. Craft the item then press V to place it. A closed ring of Signal Walls with an Access Port creates a Secure Enclave -- Daemons inside passively regen priority.</p>
+        </div>
+        <div class="system-item">
+          <h3>Relationships</h3>
+          <p>Each Daemon tracks affinity (-100 to +100) with every other. Proximity raises it, competing for fauna lowers it. High-affinity pairs move faster near each other.</p>
+        </div>
+        <div class="system-item">
+          <h3>Examine Mode</h3>
+          <p>Press E to pause and inspect anything -- tile lore, ruin durability, fauna lifecycle, structure contents, Daemon stats. Essential for knowing what you're dealing with.</p>
+        </div>
+        <div class="system-item">
+          <h3>Equipment</h3>
+          <p>40 wearable items across five slots: SHELL, HEAD, FEET, CACHE, and TOOL. Notable: Reef Suit removes water penalty, Void Plate eliminates Crystal Wastes drain, Resonance Mantle pulses regen to nearby allies.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">DAEMON MODE CONTROLS</h3>
     <div class="card">
-      <p>Daemon Mode is a completely different game built into NECROBIOME. You control named, persistent <span class="hi">Daemons</span> -- processes running in a tile-based substrate world. They have no genome and do not evolve. They execute your directives: move, harvest fauna for data, rest at relay nodes, or walk patrol routes.</p>
-      <p style="margin-top:0.75rem;">Unlock condition: crown an Architect <em>and</em> build a Home in the same session.</p>
-
-      <h3 class="sub">Daemon Stats</h3>
-      <div class="tbl-wrap">
-        <table>
-          <tr><th>STAT</th><th>DESCRIPTION</th></tr>
-          <tr><td>PRIORITY</td><td>Process priority 0–100%. Drains constantly. Recovered at RELAY tiles and from harvesting. Drops to 15% → forced rest.</td></tr>
-          <tr><td>MEMORY</td><td>Stored data, 0–999 units. Gained from harvesting fauna.</td></tr>
-          <tr><td>SPEED</td><td>Movement rate in tiles per tick at full priority.</td></tr>
-          <tr><td>STRENGTH</td><td>Harvest rate and yield modifier.</td></tr>
-          <tr><td>FOCUS</td><td>Task reliability. Less priority drain from working.</td></tr>
-        </table>
-      </div>
-
-      <h3 class="sub">The World</h3>
-      <div class="tbl-wrap">
-        <table>
-          <tr><th>TILE</th><th>GLYPH</th><th>DESCRIPTION</th></tr>
-          <tr><td>FLOOR</td><td>.</td><td>Open substrate. Fully walkable.</td></tr>
-          <tr><td>WALL</td><td>#</td><td>Solid, impassable. Ancient structures.</td></tr>
-          <tr><td>WATER</td><td>~</td><td>Liquid data channel. Daemons move slowly here.</td></tr>
-          <tr><td>SOIL</td><td>,</td><td>Fertile. Bugs and spores spawn here.</td></tr>
-          <tr><td>RUIN</td><td>%</td><td>Collapsed wall. Walkable but slow. Crawlers live here.</td></tr>
-          <tr><td>RELAY</td><td>@</td><td>Data relay node. Priority recovers rapidly here.</td></tr>
-          <tr><td>FLORA</td><td>&amp;</td><td>Living data-organisms. Spores and bugs feed here.</td></tr>
-        </table>
-      </div>
-
-      <h3 class="sub">Fauna</h3>
-      <div class="tbl-wrap">
-        <table>
-          <tr><th>FAUNA</th><th>GLYPH</th><th>HABITAT</th><th>DATA YIELD</th></tr>
-          <tr><td>BUG</td><td>.</td><td>Soil, Flora</td><td>8 units</td></tr>
-          <tr><td>FISH</td><td>~</td><td>Water</td><td>15 units</td></tr>
-          <tr><td>CRAWLER</td><td>c</td><td>Ruin, Floor</td><td>22 units</td></tr>
-          <tr><td>SPORE</td><td>*</td><td>Flora, Soil</td><td>5 units</td></tr>
-        </table>
-      </div>
-
-      <h3 class="sub">Daemon Controls</h3>
       <div class="ctrl-grid">
         <div class="ctrl-row"><span class="ctrl-key">ARROWS / WASD</span><span class="ctrl-act">move camera</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Shift + WASD</span><span class="ctrl-act">fast scroll (8x speed)</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">F</span><span class="ctrl-act">center on selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Tab</span><span class="ctrl-act">cycle selected Daemon</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Left-click tile</span><span class="ctrl-act">move selected Daemon</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Left-click Daemon</span><span class="ctrl-act">select that Daemon</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Right-click fauna</span><span class="ctrl-act">assign HARVEST</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Tab</span><span class="ctrl-act">cycle selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Right-click fauna</span><span class="ctrl-act">assign harvest</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">E</span><span class="ctrl-act">examine mode</span></div>
         <div class="ctrl-row"><span class="ctrl-key">H</span><span class="ctrl-act">harvest at cursor</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">rest at nearest Relay</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">enter / confirm patrol mode</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">clear directive queue</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">M</span><span class="ctrl-act">mine ruin at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">C</span><span class="ctrl-act">open craft menu</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">V</span><span class="ctrl-act">place structure at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">T</span><span class="ctrl-act">throw / place consumable</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">U</span><span class="ctrl-act">use consumable</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">rest at nearest relay</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">patrol mode</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">cancel patrol / clear queue</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Space</span><span class="ctrl-act">pause / unpause</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Q</span><span class="ctrl-act">quit to title screen</span></div>
       </div>
