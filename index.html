@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NECROBIOME // CELL-SIM v0.43</title>
+<title>NECROBIOME // CELL-SIM v0.52</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -411,6 +411,25 @@ h3.sub:first-child { margin-top: 0; }
 .rule-table { font-size: 11px; }
 .rule-table td:first-child { color: var(--violet); }
 
+/* ── Daemon biome card hover glows ── */
+.biome-card.scar:hover       { border-color: #AA6633; }
+.biome-card.overgrowth:hover { border-color: #66AA44; }
+.biome-card.relay:hover      { border-color: #44AAAA; }
+.biome-card.fungal:hover     { border-color: #88AA44; }
+.biome-card.crystal:hover    { border-color: #6666CC; }
+.biome-card.meadow:hover     { border-color: #44CC88; }
+.biome-card.scar, .biome-card.overgrowth, .biome-card.relay,
+.biome-card.fungal, .biome-card.crystal, .biome-card.meadow {
+  border-color: #0D0D22;
+}
+.biome-card.containment      { background: #0D0010; border-color: #2A0040; }
+.biome-card.containment:hover{ border-color: #AA44AA; }
+
+/* ── Mode extras ── */
+.mode-extras { margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #0A0A1A; }
+.mode-extras p { font-size:11px; color:#3A6858; line-height:1.7; }
+.mode-extras strong { color:var(--cyan); font-weight:normal; }
+
 /* ── Footer ── */
 footer {
   margin-top: 5rem;
@@ -455,23 +474,23 @@ footer {
  ██║ ╚████║███████╗╚██████╗██║  ██║╚██████╔╝██████╔╝██║╚██████╔╝██║ ╚═╝ ██║███████╗
  ╚═╝  ╚═══╝╚══════╝ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═════╝ ╚═╝ ╚═════╝╚═╝     ╚═╝╚══════╝</pre>
     </div>
-    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 4 3</p>
+    <p class="subtitle">C E L L - S I M &nbsp;//&nbsp; v 0 . 5 2</p>
     <p class="tagline">"In the neon dark, life finds a genome."</p>
     <div style="margin-top:1.75rem; display:flex; flex-direction:column; align-items:center; gap:0.6rem; animation:fadeup 0.8s ease 0.6s both;">
-  <a href="https://github.com/virtualbugfood/necrobiome-info/releases/download/PB5/NECROBIOME.exe"
+  <a href="https://github.com/virtualbugfood/necrobiome-info/releases/download/PB6/NECROBIOME.exe"
      style="display:inline-block; padding:0.75rem 2.5rem; background:var(--cyan); color:#02020C; font-family:'Share Tech Mono',monospace; font-size:13px; letter-spacing:2px; border-radius:6px; text-decoration:none; transition:background 0.2s, transform 0.15s;"
      onmouseover="this.style.background='#00DD99'; this.style.transform='translateY(-2px)'"
      onmouseout="this.style.background='var(--cyan)'; this.style.transform='none'">
     DOWNLOAD // WINDOWS
   </a>
-  <p style="color:#336655; font-size:10px; letter-spacing:1px;">v0.43 · Windows 10/11 · No installation required</p>
+  <p style="color:#336655; font-size:10px; letter-spacing:1px;">v0.52 · Windows 10/11 · No installation required</p>
 </div>
   </div>
 
   <!-- Ticker -->
   <div class="ticker-wrap">
     <span class="ticker-track">
-      ◈ &nbsp; [ELDER] VXEM age 412 &nbsp;·&nbsp; ACID FLOOD — 14 hit, 3 survived &nbsp;·&nbsp; [FOUNDER] ZYOS built first Home &nbsp;·&nbsp; DATA SURGE — NUEM feasted &nbsp;·&nbsp; [ARCH] crowned: KRNL-07 survived 50 ticks in Cyberspace &nbsp;·&nbsp; CHROME LOCK — mutation halved 60 ticks &nbsp;·&nbsp; [SURVIVOR] AXOR outlasted the Delta &nbsp;·&nbsp; CYBERSPACE OPENED — RULE SHIFT: FRACTAL &nbsp;·&nbsp; GLITCH: TIMESTOP — PROC-01 outside time &nbsp;·&nbsp; [BUILDER] ORYQ completed Data Node at (88,34) &nbsp; ◈
+      ◈ &nbsp; [ELDER] VXEM age 534 &nbsp;·&nbsp; ACID FLOOD -- 19 hit, 4 survived &nbsp;·&nbsp; [FOUNDER] ZYOS built first Home &nbsp;·&nbsp; [PREDATOR] VREX crowned in Neon Wastes &nbsp;·&nbsp; [ARCH] crowned: KRNL-07 survived 50 ticks in Cyberspace &nbsp;·&nbsp; [ANCIENT] NMEA deepest lineage in the Data Reef &nbsp;·&nbsp; [SCARRED] AXOR outlasted the Delta &nbsp;·&nbsp; CYBERSPACE OPENED -- RULE SHIFT: FRACTAL &nbsp;·&nbsp; GLITCH: SPLICE -- PROC-01 genome rewritten &nbsp;·&nbsp; Pulse Larva → Cocoon at (88,34) &nbsp;·&nbsp; ARC-WALKER DISCOVERED: NEXUS PRIME I &nbsp;·&nbsp; SUBSTRATE DECAY -- biome tile lost at tick 8240 &nbsp; ◈
     </span>
   </div>
 
@@ -687,22 +706,32 @@ footer {
   <section id="titles">
     <p class="section-label">TITLES</p>
     <div class="card">
-      <p style="margin-bottom:1rem;">Certain creatures earn title tags shown next to their name in the HUD and detail panel. Dynamic titles update every tick -- only one creature holds each at a time. Permanent titles are awarded once and never transferred.</p>
+      <p style="margin-bottom:1rem;">Titles are hard to earn. Requirements are strict -- many titles go unclaimed for hundreds of ticks. Dynamic titles transfer to a new holder when surpassed. Permanent titles are awarded once and never transferred. Biome crowns are awarded to the dominant creature of their biome.</p>
 
       <h3 class="sub">Dynamic</h3>
       <div class="titles-list">
-        <div class="title-row"><span class="title-key">[ELDER]</span><span class="title-val">Oldest living creature in the world right now</span></div>
-        <div class="title-row"><span class="title-key">[SAGE]</span><span class="title-val">Highest accumulated fitness score</span></div>
-        <div class="title-row"><span class="title-key">[HUNTER]</span><span class="title-val">Most kills recorded</span></div>
-        <div class="title-row"><span class="title-key">[WANDERER]</span><span class="title-val">Visited the most distinct biomes</span></div>
-        <div class="title-row"><span class="title-key">[BUILDER]</span><span class="title-val">Built or contributed to the most structures</span></div>
+        <div class="title-row"><span class="title-key">[ELDER]</span><span class="title-val">Oldest living creature -- must be age 500+</span></div>
+        <div class="title-row"><span class="title-key">[SAGE]</span><span class="title-val">Highest accumulated fitness -- must reach score 50+</span></div>
+        <div class="title-row"><span class="title-key">[HUNTER]</span><span class="title-val">Most kills recorded -- must have 25+ kills</span></div>
+        <div class="title-row"><span class="title-key">[WANDERER]</span><span class="title-val">Most biomes visited -- must have visited all 5</span></div>
+        <div class="title-row"><span class="title-key">[BUILDER]</span><span class="title-val">Most structures built -- must have built 10+</span></div>
       </div>
 
       <h3 class="sub">Permanent</h3>
       <div class="titles-list">
         <div class="title-row"><span class="title-key">[FOUNDER]</span><span class="title-val">First creature to build a Home <span class="perm">permanent</span></span></div>
         <div class="title-row"><span class="title-key">[SURVIVOR]</span><span class="title-val">First creature to survive an Acid Flood <span class="perm">permanent</span></span></div>
-        <div class="title-row"><span class="title-key">[ARCH]</span><span class="title-val">Survived 50 continuous ticks inside Cyberspace <span class="perm">permanent</span></span></div>
+        <div class="title-row"><span class="title-key">[ARCH]</span><span class="title-val">Survived 50 continuous ticks inside Personal Cyberspace <span class="perm">permanent</span></span></div>
+      </div>
+
+      <h3 class="sub">Biome Crowns</h3>
+      <div class="tbl-wrap">
+        <table>
+          <tr><th>TITLE</th><th>BIOME</th><th>CONDITION</th><th>SPECIAL EFFECT</th></tr>
+          <tr><td>[PREDATOR]</td><td>Neon Wastes</td><td>Most aggressive creature with 5+ kills</td><td>Kills adjacent creatures during hazard ticks</td></tr>
+          <tr><td>[ANCIENT]</td><td>Data Reef</td><td>Deepest lineage (30+) in the Reef</td><td>Genome slowly influences nearby mutations</td></tr>
+          <tr><td>[SCARRED]</td><td>Acid Delta</td><td>Highest resilience, survived a flood, age 100+</td><td>Required to unlock Daemon Mode from Void Only</td></tr>
+        </table>
       </div>
     </div>
   </section>
@@ -711,7 +740,7 @@ footer {
   <section id="modes">
     <p class="section-label">GAME MODES</p>
     <div class="card" style="margin-bottom:10px;">
-      <p>Select a mode from the title screen using the arrow keys. Most modes are locked at first and must be unlocked through play. Unlock progress persists between sessions.</p>
+      <p>Select a mode from the title screen using the arrow keys. The unlock chain is intentional -- each mode assumes you understood the last. Progress persists between sessions and is tracked per-mode.</p>
     </div>
 
     <div class="mode-card">
@@ -720,43 +749,62 @@ footer {
         <span class="mode-name">CLASSIC</span>
         <span class="mode-lock">always available</span>
       </div>
-      <p class="mode-desc">The standard experience. Five biomes, standard Conway rules, normal pacing. Everything in this document describes Classic mode.</p>
+      <p class="mode-desc">The standard experience. Five biomes, standard Conway rules, normal pacing.</p>
+      <div class="mode-extras">
+        <p><strong>Late-game:</strong> At tick 5000 a Signal source appears on the map -- a pulsing ◉ marker that provides a strong food bonus in a 6-tile radius and moves every 1500–3000 ticks. From tick 8000, random biome tiles slowly corrupt to Void. The habitable world gradually shrinks.</p>
+      </div>
     </div>
 
     <div class="mode-card">
       <div class="mode-header">
         <span class="mode-icon" style="color:var(--pink)">%</span>
         <span class="mode-name">VOLATILE</span>
-        <span class="mode-lock">unlock: reach tick 2000</span>
+        <span class="mode-lock">unlock: reach tick 5000 in Classic</span>
       </div>
-      <p class="mode-desc">Mutation rate tripled. Hazard cooldowns cut to 45% of normal. Acid Floods arrive every hundred ticks. Genomes drift fast. Mass extinctions are common. So are sudden population explosions. Volatile rewards watching, not planning.</p>
+      <p class="mode-desc">Mutation rate 4×. Hazard cooldowns 45% of normal. Tick speed 8 t/s. Genomes drift so fast that a stable lineage today is unrecognisable tomorrow.</p>
+      <div class="mode-extras">
+        <p><strong>Rule Shifts:</strong> Every 300–700 ticks the Conway rules change to one of five named protocols (OVERGROWTH, VOID, OVERCROWDING, SPARSE, PULSE) for 80–160 ticks. A faint magenta screen tint and HUD timer indicate an active shift.</p>
+        <p style="margin-top:0.5rem;"><strong>Genome Collapse:</strong> Every 600–1500 ticks one random creature's entire genome is rewritten. Traits, glyph, and diet all reset instantly. Announced in the ticker.</p>
+      </div>
     </div>
 
     <div class="mode-card">
       <div class="mode-header">
         <span class="mode-icon" style="color:var(--silver)">-</span>
         <span class="mode-name">DEEP TIME</span>
-        <span class="mode-lock">unlock: generation 50</span>
+        <span class="mode-lock">unlock: crown the HUNTER title in Volatile</span>
       </div>
-      <p class="mode-desc">Slow tick rate. Max age raised to 2000 ticks. A creature with max age 2000 can live for over 16 real-time minutes. Evolution is visible in Deep Time in a way it never is in other modes. You can watch a lineage specialize over hours.</p>
+      <p class="mode-desc">2 t/s. Max age 2000. Mutation 0.005. Creatures live for minutes. Evolution is visible across real time. You can watch a lineage specialize while you watch.</p>
+      <div class="mode-extras">
+        <p><strong>Biome Drift:</strong> Every 1500–3000 ticks a biome edge shifts -- border tiles convert from one biome to another. Lineages adapted to their home slowly get pushed into hostile territory.</p>
+        <p style="margin-top:0.5rem;"><strong>Extinction Events:</strong> Every 8000–15000 ticks a random biome suffers 3× hazard intensity. Ancient creatures leave Relics when they die. The world rebuilds from survivors.</p>
+      </div>
     </div>
 
     <div class="mode-card">
       <div class="mode-header">
         <span class="mode-icon" style="color:var(--lime)">#</span>
         <span class="mode-name">OVERPOPULATED</span>
-        <span class="mode-lock">unlock: build 20 structures</span>
+        <span class="mode-lock">unlock: a creature reaches generation 100 in Deep Time</span>
       </div>
-      <p class="mode-desc">Population target raised to 2000. The grid is dense from tick one and never quiets down. Resources are thin. Competition is constant. Structures matter more here than in any other mode.</p>
+      <p class="mode-desc">Population target 2000. Dense from tick one. Never quiets down. Resources thin. Competition constant. Structures matter more here than anywhere.</p>
+      <div class="mode-extras">
+        <p><strong>Faction Colours:</strong> Creatures are coloured by lineage faction. Competing populations form visible coloured territories. Watch blobs expand and collapse as factions rise and fall.</p>
+        <p style="margin-top:0.5rem;"><strong>Famine Zones:</strong> Every 2000–4000 ticks a localised zone loses all food for 40–80 ticks. Creatures emigrate or die. The ticker announces the zone and remaining duration.</p>
+      </div>
     </div>
 
     <div class="mode-card">
       <div class="mode-header">
         <span class="mode-icon" style="color:var(--blue)">.</span>
         <span class="mode-name">VOID ONLY</span>
-        <span class="mode-lock">unlock: crown an Architect</span>
+        <span class="mode-lock">unlock: build 50 structures in Overpopulated</span>
       </div>
-      <p class="mode-desc">A single biome covers the entire world. No Data Reef, no Acid Delta, no Chrome Flats. Only the Void. What survives here evolved for exactly this -- nothing -- and earned every tick.</p>
+      <p class="mode-desc">One biome. The empty dark. No shelter, no variety.</p>
+      <div class="mode-extras">
+        <p><strong>Void Drift:</strong> Every 80–200 ticks, isolated creatures with 1 or fewer neighbours have a 25% chance of being consumed by the void. Staying still is death.</p>
+        <p style="margin-top:0.5rem;"><strong>Void Creep:</strong> Every 400–600 ticks the playfield physically shrinks. By tick ~5000 the world is significantly smaller. Creatures at the edge are consumed.</p>
+      </div>
     </div>
   </section>
 
@@ -770,7 +818,7 @@ footer {
 
     <div class="card" style="margin-bottom:10px;">
       <p>Daemon Mode is a completely different game from Classic. You control named <span class="hi">Daemons</span> -- persistent substrate processes with genomes, memories, and relationships -- directing them to explore, harvest, mine, craft, and build in a <span class="hi">210x122 procedurally generated tile world</span> across 11 biomes. The world is different every run.</p>
-      <p style="margin-top:0.75rem; color:#336655;">Unlock: crown an Architect and build a Home in the same Classic session.</p>
+      <p style="margin-top:0.75rem; color:#336655;">Unlock: crown an Architect AND crown a [SCARRED] creature in Void Only.</p>
     </div>
 
     <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">TILES</h3>
@@ -801,35 +849,35 @@ footer {
         <p class="biome-name" style="color:var(--blue)">DATA REEF</p>
         <p class="biome-desc">The best fishing in the world, passive regen near relays, and rivers cutting through it.</p>
       </div>
-      <div class="biome-card" style="border-color:#1A0A00;">
+      <div class="biome-card scar">
         <p class="biome-name" style="color:#AA6633">THE SCAR</p>
         <p class="biome-desc">A diagonal wound across the map. Move penalty, Void Wisps that drain priority, Fracture Veins everywhere.</p>
       </div>
-      <div class="biome-card acid">
+      <div class="biome-card overgrowth">
         <p class="biome-name" style="color:#66AA44">THE OVERGROWTH</p>
         <p class="biome-desc">The richest hunting in any biome, but Thornwire coats every ruin and must be cleared first.</p>
       </div>
-      <div class="biome-card chrome">
+      <div class="biome-card crystal">
         <p class="biome-name" style="color:#AAAAAA">ARCHIVE QUARTER</p>
         <p class="biome-desc">Silent and nearly empty. Almost no fauna, but guaranteed high-value ruin drops including Archive Silk.</p>
       </div>
-      <div class="biome-card" style="border-color:#001A1A;">
+      <div class="biome-card relay">
         <p class="biome-name" style="color:#44AAAA">RELAY NETWORK</p>
         <p class="biome-desc">Passive priority regen everywhere you stand. The safest place to rest and regroup.</p>
       </div>
-      <div class="biome-card cyber">
+      <div class="biome-card containment">
         <p class="biome-name" style="color:#AA44AA">CONTAINMENT ZONE</p>
         <p class="biome-desc">Contained Echoes wander the perimeter. The Void Core sits at the center, silent and waiting.</p>
       </div>
-      <div class="biome-card" style="border-color:#1A0A00;">
+      <div class="biome-card fungal">
         <p class="biome-name" style="color:#88AA44">FUNGAL DELTA</p>
         <p class="biome-desc">Corrosive ambient drain and no ruins, but rich in Jelly Fiber and Fungal Silk.</p>
       </div>
-      <div class="biome-card" style="border-color:#0A0A2A;">
+      <div class="biome-card crystal">
         <p class="biome-name" style="color:#6666CC">CRYSTAL WASTES</p>
         <p class="biome-desc">Severe void drain with no ruins. Crystalbacks and Void Serpents make it worth the risk.</p>
       </div>
-      <div class="biome-card" style="border-color:#001A10;">
+      <div class="biome-card meadow">
         <p class="biome-name" style="color:#44CC88">SIGNAL MEADOW</p>
         <p class="biome-desc">Peaceful and restorative. Signal Deer don't flee. Strong passive regen. A rare quiet in a hostile world.</p>
       </div>
@@ -883,24 +931,40 @@ footer {
 
     <h3 class="sub" style="margin-bottom:0.75rem; margin-top:1.5rem;">DAEMON MODE CONTROLS</h3>
     <div class="card">
+      <h3 class="sub" style="margin-top:0;">Camera</h3>
       <div class="ctrl-grid">
         <div class="ctrl-row"><span class="ctrl-key">ARROWS / WASD</span><span class="ctrl-act">move camera</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Shift + WASD</span><span class="ctrl-act">fast scroll (8x speed)</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">F</span><span class="ctrl-act">center on selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">F</span><span class="ctrl-act">center camera on selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Scroll / + / -</span><span class="ctrl-act">zoom in / out (canvas only)</span></div>
+      </div>
+      <h3 class="sub">Selection &amp; Movement</h3>
+      <div class="ctrl-grid">
         <div class="ctrl-row"><span class="ctrl-key">Tab</span><span class="ctrl-act">cycle selected Daemon</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Left-click tile</span><span class="ctrl-act">move selected Daemon</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Left-click tile</span><span class="ctrl-act">move selected Daemon there</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Left-click Daemon</span><span class="ctrl-act">select that Daemon</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Right-click fauna</span><span class="ctrl-act">assign harvest</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">E</span><span class="ctrl-act">examine mode</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">H</span><span class="ctrl-act">harvest at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Right-click fauna</span><span class="ctrl-act">assign harvest directive</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Right-click tile</span><span class="ctrl-act">assign move directive</span></div>
+      </div>
+      <h3 class="sub">Directives</h3>
+      <div class="ctrl-grid">
+        <div class="ctrl-row"><span class="ctrl-key">H</span><span class="ctrl-act">harvest fauna at cursor</span></div>
         <div class="ctrl-row"><span class="ctrl-key">M</span><span class="ctrl-act">mine ruin at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">rest -- travel to nearest relay</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">enter / confirm patrol mode</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">cancel patrol OR clear directive queue</span></div>
+      </div>
+      <h3 class="sub">Actions</h3>
+      <div class="ctrl-grid">
         <div class="ctrl-row"><span class="ctrl-key">C</span><span class="ctrl-act">open craft menu</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">V</span><span class="ctrl-act">place structure at cursor</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">T</span><span class="ctrl-act">throw / place consumable</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">U</span><span class="ctrl-act">use consumable</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">R</span><span class="ctrl-act">rest at nearest relay</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">P</span><span class="ctrl-act">patrol mode</span></div>
-        <div class="ctrl-row"><span class="ctrl-key">Escape</span><span class="ctrl-act">cancel patrol / clear queue</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">V</span><span class="ctrl-act">open place structure popup</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">X</span><span class="ctrl-act">open equipment popup</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">T</span><span class="ctrl-act">throw / place consumable at cursor</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">U</span><span class="ctrl-act">use consumable (flask, catalyst, seed)</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">E</span><span class="ctrl-act">examine mode -- pause and inspect any tile</span></div>
+      </div>
+      <h3 class="sub">System</h3>
+      <div class="ctrl-grid">
         <div class="ctrl-row"><span class="ctrl-key">Space</span><span class="ctrl-act">pause / unpause</span></div>
         <div class="ctrl-row"><span class="ctrl-key">Q</span><span class="ctrl-act">quit to title screen</span></div>
       </div>
